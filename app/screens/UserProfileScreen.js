@@ -3,10 +3,10 @@ import { SafeAreaView, View, Text, StyleSheet, TouchableOpacity, FlatList } from
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 const settingsOptions = [
-  { title: 'Personal Information', icon: 'user' },
-  { title: 'Saved Payment Methods', icon: 'credit-card' },
-  { title: 'Purchase History', icon: 'history' },
-  { title: 'Wishlist', icon: 'heart' },
+  { title: 'Personal Information', icon: 'user', target: 'PersonalInfoScreen' },
+  { title: 'Saved Payment Methods', icon: 'credit-card', target: 'PaymentMethodScreen' },
+  { title: 'Purchase History', icon: 'history', target: 'PurchaseHistoryScreen' },
+  { title: 'Wishlist', icon: 'heart', target: 'WishlistScreen' },
 ];
 
 let Profile = "Profile";
@@ -27,12 +27,15 @@ const UserProfileScreen = ({ navigation }) => {
     <SettingsItem
       title={item.title}
       iconName={item.icon}
-      onPress={() => navigation.navigate(item.title)}
+      onPress={() => navigation.navigate(item.target)}
     />
   );
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
+      <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('StoreSelect')}>
+        <Text style={styles.buttonText}>Back</Text>
+      </TouchableOpacity>
       <View style={styles.headerContainer}>
         <Text style={styles.headerTitle}>Profile</Text>
       </View>
@@ -62,7 +65,7 @@ const UserProfileScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
 headerContainer: {
     padding: 20, 
-    marginTop: 20, 
+    marginTop: 70, 
     alignItems: 'center', 
     },
     headerTitle: {
@@ -101,6 +104,16 @@ button: {
 },
 buttonText: {
     color: 'white',
+},
+backButton: {
+  position: 'absolute',
+  top: 55,
+  left: 20,
+  backgroundColor: 'black',
+  paddingHorizontal: 10,
+  borderRadius: 20,
+  height: 35,
+  justifyContent: 'center',
 },
 });
 

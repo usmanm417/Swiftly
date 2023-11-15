@@ -66,6 +66,7 @@ const styles = StyleSheet.create({
     name: {
         fontWeight: 'bold',
         fontSize: 25,
+        marginTop: 20,
     },
     subtitle: {
         marginTop: 20, // Adjust the margin top to increase space between logo and subtitle

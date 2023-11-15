@@ -6,7 +6,7 @@ const StoreSelect = () => {
     const [isDropdownVisible, setDropdownVisible] = useState(false);
     const [selectedItem, setSelectedItem] = useState('Select store  ▼');
     const data = ['Adidas', 'Zara', 'WillOfGod', 'Nike'];
-    const navigation = useNavigation(); // use useNavigation hook to get the navigation object
+    const navigation = useNavigation();
 
     const toggleDropdown = () => {
         setDropdownVisible(!isDropdownVisible);
@@ -18,12 +18,10 @@ const StoreSelect = () => {
     };
 
     const handleSelectStore = () => {
-        // navigate to HomePage.js with the selected store information
         navigation.navigate('HomePage', { selectedStore: selectedItem });
     };
 
     const handleGoBack = () => {
-        // go back to the previous screen
         navigation.goBack();
     };
 
@@ -35,7 +33,7 @@ const StoreSelect = () => {
             <Text style={styles.headerText}>Please select a Swiftly partnered store below:</Text>
             <View style={styles.buttonContainer}>
                 <TouchableOpacity onPress={toggleDropdown} style={styles.dropdownButton}>
-                    <Text>{selectedItem}</Text>
+                    <Text style={styles.buttonText}>{selectedItem}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={handleSelectStore} style={styles.selectStoreButton}>
                     <Text style={styles.selectStoreButtonText}>Start Scanning!</Text>
@@ -85,20 +83,36 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     dropdownButton: {
+        color: 'white', // Set the text color to white
         padding: 10,
-        borderWidth: 1,
-        borderColor: 'gray',
-    },
-    selectStoreButton: {
-        marginTop: 10,
-        padding: 10,
-        backgroundColor: 'white',
+        backgroundColor: 'black', // Set the button background color to black
         borderRadius: 5,
         borderWidth: 1,
         borderColor: 'black',
+        width: 300,
+        alignItems: 'center',
+        marginTop: 20,
+    },
+    buttonText: {
+        color: 'white',
+        fontSize: 16,
+        textAlign: 'center',
+    },
+    selectStoreButton: {
+        marginTop: 50,
+        padding: 10,
+        backgroundColor: 'black', // Set the button background color to black
+        borderRadius: 20,
+        borderWidth: 1,
+        borderColor: 'black',
+        alignItems: 'center', // Center horizontally
+        justifyContent: 'center', // Center vertically
+        height: 40, // Add this line to specify a height
     },
     selectStoreButtonText: {
-        color: 'black',
+        color: 'white', // Set the text color to white
+        fontSize: 16,
+        textAlign: 'center',
     },
     modalContainer: {
         flex: 1,
@@ -126,19 +140,20 @@ const styles = StyleSheet.create({
         backgroundColor: 'gray',
         width: '100%',
     },
-    buttonText: {
-        color: 'white',
-        fontSize: 18,
-    },
     backButton: {
         position: 'absolute',
         top: 55,
         left: 20,
         backgroundColor: 'black',
-        paddingHorizontal: 10, // Adjusted padding for symmetry
+        paddingHorizontal: 10,
         borderRadius: 20,
         height: 35,
-        justifyContent: 'center', // Added to vertically center the text
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    backButtonText: {
+        color: 'white',
+        fontSize: 16,
     },
 });
 

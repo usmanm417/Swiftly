@@ -1,15 +1,27 @@
 import React, { useState } from 'react';
 import { View, Text, Button, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LoginScreen = ({ navigation }) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
-    const handleLogin = () => {
-        // Handle login logic here with 'username' and 'password' values
-        navigation.navigate('StoreSelect');
+    const handleLogin = async () => {
+        try {
+            const storedCredentials = await AsyncStorage.getItem('userCredentials');
+            const { username: storedUsername, password: storedPassword } = JSON.parse(storedCredentials || '{}');
+    
+            if (username === storedUsername && password === storedPassword) {
+                // User is authenticated
+                navigation.navigate('StoreSelect');
+            } else {
+                // Handle authentication failure
+            }
+        } catch (error) {
+            console.error('Failed to read the data from the storage', error);
+        }
     };
-
+    
     const handleCreateAccount = () => {
         navigation.navigate('RegisterScreen');
     }
@@ -85,7 +97,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center', // Added to vertically center the text
     },
     textBetween: {
-        fontSize: 18
+        marginTop: 10,
     }
 });
 

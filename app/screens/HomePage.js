@@ -19,24 +19,17 @@ const HomePage = ({ navigation }) => {
         askForCameraPermission();
     }, []);
 
-    // Process of actually scanning barcode/qr code
-    const handleBarCodeScanned = async ({ type, data }) => {
+    const handleBarCodeScanned = ({ type, data }) => {
         setScanned(true);
-        // Send request to your server
-        try {
-            const response = await fetch('http://localhost:3000/getitem', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ id: data })
-            });
-            const itemData = await response.json();
-            setText(itemData.name || 'Item not found');
-        } catch (error) {
-            console.error('Error:', error);
-        }
+        setText(data);
+        console.log('Type: ' + type + '\nData: ' + data);
+      
+        // Call the function to fetch item data from the database
+        // fetchItemData(data);
     };
+
+    // const fetchItemData = async (barcodeId) => {
+    // };    
 
     // The following 2 if conditions will check and return the proper prompt/view
     if (hasPermission === null) {
@@ -129,7 +122,9 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         width: 60,
         height: 40,
-        marginTop: 30,
+        marginTop: 20,
+        alignItems: 'center', // Center horizontally
+        justifyContent: 'center', // Center vertically
     },
     buttonContainer: {
         flexDirection: 'row',

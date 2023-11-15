@@ -1,14 +1,35 @@
 import React, { useState } from 'react';
 import { View, Text, Button, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const RegisterScreen = ({ navigation }) => {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const handleRegister = () => {
-        // Handle registration logic here with 'username', 'email', and 'password' values
-        navigation.navigate('StoreSelect');
+    const isValidEmail = (email) => {
+        const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(String(email).toLowerCase());
+    };
+    
+
+    const handleRegister = async () => {
+        if (!username || !email || !password) {
+            alert("Please fill all fields");
+            return;
+        }
+    
+        if (!isValidEmail(email)) {
+            alert("Invalid email");
+            return;
+        }
+
+        try {
+            await AsyncStorage.setItem('userCredentials', JSON.stringify({ username, email, password }));
+            navigation.navigate('StoreSelect');
+        } catch (error) {
+            console.error('Failed to save the data to the storage', error);
+        }
     };
 
     const handleLogin = () => {
@@ -89,6 +110,10 @@ const styles = StyleSheet.create({
         height: 35,
         justifyContent: 'center',
     },
+    textBetween: {
+        marginTop: 10,
+        marginBottom: 10,
+    }
 });
 
 export default RegisterScreen;
