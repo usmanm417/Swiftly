@@ -89,8 +89,9 @@ const styles = StyleSheet.create({
         padding: 10,
         borderRadius: 20,
         width: 60,
-        height: 40,
+        height: 50,
     },
+
 });
 
 export default CartScreen;
