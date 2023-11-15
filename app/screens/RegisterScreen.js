@@ -17,6 +17,9 @@ const RegisterScreen = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
+            <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('WelcomeScreen')}>
+                    <Text style={styles.buttonText}>Back</Text>
+            </TouchableOpacity>
             <Text style={styles.title}>Create an Account</Text>
             <TextInput
                 style={styles.input}
@@ -37,8 +40,8 @@ const RegisterScreen = ({ navigation }) => {
             <TouchableOpacity style={styles.roundedButton} onPress={handleRegister}>
                 <Text style={styles.buttonText}>Create Account</Text>
             </TouchableOpacity>
-           
-            <Text>or</Text>
+
+            <Text style={styles.textBetween}>━━━━━━ OR ━━━━━━</Text>
             
             <TouchableOpacity style={styles.roundedButton} onPress={handleLogin}>
                 <Text style={styles.buttonText}>Login</Text>
@@ -74,7 +77,17 @@ const styles = StyleSheet.create({
     },
     buttonText: {
         color: 'white',
-        fontSize: 20,
+        fontSize: 18,
+    },
+    backButton: {
+        position: 'absolute',
+        top: 55,
+        left: 20,
+        backgroundColor: 'black',
+        paddingHorizontal: 10,
+        borderRadius: 20,
+        height: 35,
+        justifyContent: 'center',
     },
 });
 

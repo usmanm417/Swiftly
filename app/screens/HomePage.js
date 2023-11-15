@@ -20,10 +20,22 @@ const HomePage = ({ navigation }) => {
     }, []);
 
     // Process of actually scanning barcode/qr code
-    const handleBarCodeScanned = ({ type, data }) => {
+    const handleBarCodeScanned = async ({ type, data }) => {
         setScanned(true);
-        setText(data);
-        console.log('Type: ' + type + '\nData: ' + data);
+        // Send request to your server
+        try {
+            const response = await fetch('http://localhost:3000/getitem', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ id: data })
+            });
+            const itemData = await response.json();
+            setText(itemData.name || 'Item not found');
+        } catch (error) {
+            console.error('Error:', error);
+        }
     };
 
     // The following 2 if conditions will check and return the proper prompt/view
@@ -49,7 +61,7 @@ const HomePage = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('LoginScreen')}>
+                <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('StoreSelect')}>
                     <Text style={styles.buttonText}>Back</Text>
                 </TouchableOpacity>
             </View>
@@ -66,13 +78,13 @@ const HomePage = ({ navigation }) => {
             )}
             <View style={styles.buttonContainer}>
                 <TouchableOpacity style={styles.button} onPress={() => console.log('Button 1 Pressed')}>
-                    <Text style={styles.buttonText}>Button 1</Text>
+                    <Text style={styles.buttonText}>Scanner</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.button} onPress={() => console.log('Button 2 Pressed')}>
-                    <Text style={styles.buttonText}>Button 2</Text>
+                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('CartScreen')}>
+                    <Text style={styles.buttonText}>Cart</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.button} onPress={() => console.log('Button 3 Pressed')}>
-                    <Text style={styles.buttonText}>Button 3</Text>
+                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('UserProfileScreen')}>
+                    <Text style={styles.buttonText}>Profile</Text>
                 </TouchableOpacity>
             </View>
         </View>
@@ -94,7 +106,7 @@ const styles = StyleSheet.create({
         width: 320,
         overflow: 'hidden',
         borderRadius: 30,
-        backgroundColor: 'tomato',
+        backgroundColor: 'gray',
     },
     maintext: {
         fontSize: 16,
@@ -107,20 +119,23 @@ const styles = StyleSheet.create({
     },
     header: {
         position: 'absolute',
-        top: 50, // Adjust this value to move the back button lower
-        left: 10,
+        top: 30, 
+        left: 20,
         zIndex: 1,
     },
     backButton: {
         backgroundColor: 'black',
         padding: 10,
         borderRadius: 20,
+        width: 60,
+        height: 40,
+        marginTop: 30,
     },
     buttonContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         position: 'absolute',
-        bottom: 20, // Adjust this value to move the bottom buttons higher
+        bottom: 40,
         left: 10,
         right: 10,
     },
@@ -131,6 +146,7 @@ const styles = StyleSheet.create({
     },
     buttonText: {
         color: 'white',
+        alignContent: 'center',
     },
 });
 

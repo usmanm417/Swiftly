@@ -15,9 +15,9 @@ function WelcomeScreen({ navigation }) {
             <View style={styles.logoContainer}>
                 <Image style={styles.logo} source={require("../assets/logo.png")} />
                 
-                <Text style={styles.name}>Swiftly</Text>
+                <Text style={[styles.name, styles.spaceAfterLogo]}>Swiftly</Text>
                 
-                <Text>Redefining the shopping experience</Text>
+                <Text style={styles.subtitle}>Redefining the shopping experience</Text>
             </View>
 
             <View style={styles.buttonContainer}>
@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
     },
     button: {
         width: '80%',
-        height: 70,
+        height: 60,
         backgroundColor: 'black',
         alignItems: 'center',
         justifyContent: 'center',
@@ -66,6 +66,9 @@ const styles = StyleSheet.create({
     name: {
         fontWeight: 'bold',
         fontSize: 25,
+    },
+    subtitle: {
+        marginTop: 20, // Adjust the margin top to increase space between logo and subtitle
     },
     logoContainer: {
         position: "absolute",

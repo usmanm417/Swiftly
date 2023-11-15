@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Modal, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, Modal, StyleSheet, Dimensions } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 const StoreSelect = () => {
     const [isDropdownVisible, setDropdownVisible] = useState(false);
-    const [selectedItem, setSelectedItem] = useState('Item 1'); // Initial selected item
-    const data = ['Item 1', 'Item 2', 'Item 3', 'Item 4']; // Replace with your dynamic data
+    const [selectedItem, setSelectedItem] = useState('Select store  ▼');
+    const data = ['Adidas', 'Zara', 'WillOfGod', 'Nike'];
+    const navigation = useNavigation(); // use useNavigation hook to get the navigation object
 
     const toggleDropdown = () => {
         setDropdownVisible(!isDropdownVisible);
@@ -15,26 +17,58 @@ const StoreSelect = () => {
         toggleDropdown();
     };
 
+    const handleSelectStore = () => {
+        // navigate to HomePage.js with the selected store information
+        navigation.navigate('HomePage', { selectedStore: selectedItem });
+    };
+
+    const handleGoBack = () => {
+        // go back to the previous screen
+        navigation.goBack();
+    };
+
     return (
         <View style={styles.container}>
-        <Text>StoreSelect</Text>
-        <TouchableOpacity onPress={toggleDropdown} style={styles.dropdownButton}>
-            <Text>{selectedItem}</Text>
-        </TouchableOpacity>
-        <Modal visible={isDropdownVisible} transparent={true} animationType="slide">
-            <View style={styles.modal}>
-            {data.map((item) => (
-                <TouchableOpacity key={item} onPress={() => handleSelectItem(item)} style={styles.dropdownItem}>
-                <Text>{item}</Text>
+            <TouchableOpacity onPress={handleGoBack} style={styles.backButton}>
+                <Text style={styles.backButtonText}>Back</Text>
+            </TouchableOpacity>
+            <Text style={styles.headerText}>Please select a Swiftly partnered store below:</Text>
+            <View style={styles.buttonContainer}>
+                <TouchableOpacity onPress={toggleDropdown} style={styles.dropdownButton}>
+                    <Text>{selectedItem}</Text>
                 </TouchableOpacity>
-            ))}
+                <TouchableOpacity onPress={handleSelectStore} style={styles.selectStoreButton}>
+                    <Text style={styles.selectStoreButtonText}>Start Scanning!</Text>
+                </TouchableOpacity>
             </View>
-        </Modal>
+            <Modal
+                visible={isDropdownVisible}
+                transparent={true}
+                animationType="slide"
+                onRequestClose={() => setDropdownVisible(false)}
+            >
+                <View style={styles.modalContainer}>
+                    <TouchableOpacity
+                        style={styles.modalBackground}
+                        onPress={() => setDropdownVisible(false)}
+                    />
+                    <View style={styles.modal}>
+                        {data.map((item, index) => (
+                            <TouchableOpacity
+                                key={item}
+                                onPress={() => handleSelectItem(item)}
+                                style={styles.dropdownItem}
+                            >
+                                <Text>{item}</Text>
+                                {index < data.length - 1 && <View style={styles.separator} />}
+                            </TouchableOpacity>
+                        ))}
+                    </View>
+                </View>
+            </Modal>
         </View>
     );
 };
-
-export default StoreSelect;
 
 const styles = StyleSheet.create({
     container: {
@@ -42,23 +76,70 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
+    headerText: {
+        marginBottom: 10,
+        fontWeight: 'bold',
+        fontSize: 16,
+    },
+    buttonContainer: {
+        marginBottom: 10,
+    },
     dropdownButton: {
         padding: 10,
         borderWidth: 1,
         borderColor: 'gray',
     },
-    modal: {
-        flex: 0.5, // Adjust the height as needed
-        width: 200, // Adjust the width as needed
-        alignSelf: 'center',
-        justifyContent: 'center',
+    selectStoreButton: {
+        marginTop: 10,
+        padding: 10,
+        backgroundColor: 'white',
+        borderRadius: 5,
+        borderWidth: 1,
+        borderColor: 'black',
+    },
+    selectStoreButtonText: {
+        color: 'black',
+    },
+    modalContainer: {
+        flex: 1,
+        justifyContent: 'flex-end',
         alignItems: 'center',
+    },
+    modalBackground: {
+        flex: 1,
+        width: Dimensions.get('window').width,
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
+    modal: {
+        width: Dimensions.get('window').width,
+        backgroundColor: 'white',
+        borderRadius: 10,
+        marginBottom: 8,
     },
     dropdownItem: {
         padding: 10,
-        borderBottomWidth: 1,
-        borderColor: 'gray',
-        width: 200,
+        width: Dimensions.get('window').width,
+        backgroundColor: 'white',
+    },
+    separator: {
+        height: 1,
+        backgroundColor: 'gray',
+        width: '100%',
+    },
+    buttonText: {
+        color: 'white',
+        fontSize: 18,
+    },
+    backButton: {
+        position: 'absolute',
+        top: 55,
+        left: 20,
+        backgroundColor: 'black',
+        paddingHorizontal: 10, // Adjusted padding for symmetry
+        borderRadius: 20,
+        height: 35,
+        justifyContent: 'center', // Added to vertically center the text
     },
 });
+
+export default StoreSelect;

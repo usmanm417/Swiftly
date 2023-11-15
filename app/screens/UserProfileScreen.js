@@ -7,8 +7,6 @@ const settingsOptions = [
   { title: 'Saved Payment Methods', icon: 'credit-card' },
   { title: 'Purchase History', icon: 'history' },
   { title: 'Wishlist', icon: 'heart' },
-  { title: 'Settings', icon: 'cog' },
-  { title: 'Help', icon: 'question-circle' },
 ];
 
 let Profile = "Profile";
@@ -43,7 +41,18 @@ const UserProfileScreen = ({ navigation }) => {
       renderItem={renderItem}
       keyExtractor={item => item.title}
       ItemSeparatorComponent={ItemSeparator}
-    />
+      />
+      <View style={styles.buttonContainer}>
+                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('HomePage')}>
+                    <Text style={styles.buttonText}>Scanner</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('CartScreen')}>
+                    <Text style={styles.buttonText}>Cart</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.button} onPress={() => console.log('Button Pressed')}>
+                    <Text style={styles.buttonText}>Profile</Text>
+                </TouchableOpacity>
+            </View>
     </SafeAreaView>
     
     
@@ -77,6 +86,22 @@ headerContainer: {
     width: '100%',
     backgroundColor: '#ccc',
   },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    position: 'absolute',
+    bottom: 40,
+    left: 10,
+    right: 10,
+},
+button: {
+    backgroundColor: 'black',
+    padding: 10,
+    borderRadius: 20,
+},
+buttonText: {
+    color: 'white',
+},
 });
 
 export default UserProfileScreen;

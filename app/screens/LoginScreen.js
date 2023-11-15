@@ -16,6 +16,9 @@ const LoginScreen = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
+            <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('WelcomeScreen')}>
+                <Text style={styles.buttonText}>Back</Text>
+            </TouchableOpacity>
             <Text style={styles.title}>Sign in to your account</Text>
             <TextInput
                 style={styles.input}
@@ -31,9 +34,9 @@ const LoginScreen = ({ navigation }) => {
             <TouchableOpacity style={styles.roundedButton} onPress={handleLogin}>
                 <Text style={styles.buttonText}>Login</Text>
             </TouchableOpacity>
-            
-            <Text>or</Text>
-            
+
+            <Text style={styles.textBetween}>━━━━━━ OR ━━━━━━</Text>
+
             <TouchableOpacity style={styles.roundedButton} onPress={handleCreateAccount}>
                 <Text style={styles.buttonText}>Create an Account</Text>
             </TouchableOpacity>
@@ -61,15 +64,29 @@ const styles = StyleSheet.create({
     },
     roundedButton: {
         backgroundColor: 'black',
-        borderRadius: 20, // Adjust this value to control the roundness
+        borderRadius: 20,
         padding: 10,
         width: '80%',
         alignItems: 'center',
+        marginTop: 10,
     },
     buttonText: {
         color: 'white',
-        fontSize: 20,
+        fontSize: 18,
     },
+    backButton: {
+        position: 'absolute',
+        top: 55,
+        left: 20,
+        backgroundColor: 'black',
+        paddingHorizontal: 10, // Adjusted padding for symmetry
+        borderRadius: 20,
+        height: 35,
+        justifyContent: 'center', // Added to vertically center the text
+    },
+    textBetween: {
+        fontSize: 18
+    }
 });
 
 export default LoginScreen;
