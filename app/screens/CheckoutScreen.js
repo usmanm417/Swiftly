@@ -28,16 +28,26 @@ const CheckoutScreen = ({ navigation, route }) => {
                     <Text key={index} style={styles.cartItem}>{item.item} - {item.quantity}</Text>
                 ))}
             </ScrollView>
-            <View style={styles.pickerContainer}>
-                <TouchableOpacity style={styles.button1} onPress={() => setShowPaymentMethods(true)}>
-                    <Text style={styles.buttonText}>Select Payment Method</Text>
+            
+            {paymentMethods.length === 0 ? (
+                <TouchableOpacity
+                    style={styles.addPaymentMethodButton}
+                    onPress={() => navigation.navigate('PaymentMethodScreen')}>
+                    <Text style={styles.buttonText}>Add a new saved payment method</Text>
                 </TouchableOpacity>
-                {selectedPaymentMethod ? (
-                    <Text style={styles.selectedPaymentMethod}>
-                        Selected Card: **** **** **** {selectedPaymentMethod.substr(-4)}
-                    </Text>
-                ) : null}
-            </View>
+            ) : (
+                <View style={styles.pickerContainer}>
+                    <TouchableOpacity style={styles.button1} onPress={() => setShowPaymentMethods(true)}>
+                        <Text style={styles.buttonText}>Select Payment Method</Text>
+                    </TouchableOpacity>
+                    {selectedPaymentMethod ? (
+                        <Text style={styles.selectedPaymentMethod}>
+                            Selected Card: **** **** **** {selectedPaymentMethod.substr(-4)}
+                        </Text>
+                    ) : null}
+                </View>
+            )}
+
             <TouchableOpacity style={styles.button1} onPress={handleCheckout}>
                 <Text style={styles.buttonText}>Pay Now</Text>
             </TouchableOpacity>
@@ -240,6 +250,15 @@ const styles = StyleSheet.create({
         color: 'black',
         marginBottom: 20, // Add space between the text and the button
         marginTop: 20,
+    },
+    addPaymentMethodButton: {
+        backgroundColor: 'black',
+        padding: 15,
+        borderRadius: 30,
+        marginTop: 20,
+        width: '80%',
+        alignItems: 'center',
+        alignSelf: 'center',
     },
 });
 

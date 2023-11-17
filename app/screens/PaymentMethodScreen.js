@@ -91,6 +91,12 @@ const PaymentMethodScreen = ({ navigation }) => {
                     </View>
                 ))}
             </ScrollView>
+
+            <TouchableOpacity 
+                style={styles.backToCartButton}
+                onPress={() => navigation.navigate('CartScreen')}>
+                <Text style={styles.buttonText}>Back to Cart</Text>
+            </TouchableOpacity>
         </View>
     );
 };
@@ -163,6 +169,17 @@ const styles = StyleSheet.create({
     deleteButtonText: {
         color: 'white',
     },
+    backToCartButton: {
+        backgroundColor: 'black',
+        paddingVertical: 10,
+        paddingHorizontal: 30,
+        borderRadius: 25,
+        position: 'absolute',
+        bottom: 20,
+        width: '80%',
+        alignItems: 'center',
+        alignSelf: 'center',
+    },    
 });
 
 export default PaymentMethodScreen;
