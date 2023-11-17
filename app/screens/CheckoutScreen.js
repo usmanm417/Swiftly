@@ -1,23 +1,27 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Modal, ScrollView, ActivityIndicator } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
 import QRCode from 'react-native-qrcode-svg';
 import { usePaymentMethods } from './PaymentMethodProvider';
+import { useCart } from './CartContext';
+import { usePurchaseHistory } from './PurchaseHistoryContext';
 
 const CheckoutScreen = ({ navigation, route }) => {
-    const cartData = route.params?.cartData || [];
+    const { cartData, removeCartItem } = useCart();
     const { paymentMethods } = usePaymentMethods();
     const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(paymentMethods?.[0]?.cardNumber || '');
     const [isPaying, setIsPaying] = useState(false);
     const [paymentSuccess, setPaymentSuccess] = useState(false);
     const [showPaymentMethods, setShowPaymentMethods] = useState(false);
+    const { addPurchase } = usePurchaseHistory();
 
     const handleCheckout = () => {
         setIsPaying(true);
         setTimeout(() => {
             setIsPaying(false);
             setPaymentSuccess(true);
-        }, 2000); // Simulate a loading time
+            addPurchase({ date: new Date(), items: cartData }); // Add the purchase to history
+            removeCartItem(null); // Clear all items from the cart
+        }, 2000);
     };
 
     return (
@@ -25,7 +29,14 @@ const CheckoutScreen = ({ navigation, route }) => {
             <Text style={styles.title}>Checkout</Text>
             <ScrollView style={styles.cartItemsContainer}>
                 {cartData.map((item, index) => (
-                    <Text key={index} style={styles.cartItem}>{item.item} - {item.quantity}</Text>
+                    <View key={index} style={styles.cartItemView}>
+                        <Text style={styles.cartItem}>{item.item} - {item.quantity}</Text>
+                        <TouchableOpacity 
+                            style={styles.deleteButton}
+                            onPress={() => removeCartItem(index)}>
+                            <Text style={styles.deleteButtonText}>Delete</Text>
+                        </TouchableOpacity>
+                    </View>
                 ))}
             </ScrollView>
             
@@ -88,19 +99,29 @@ const CheckoutScreen = ({ navigation, route }) => {
                     <View style={styles.modalView}>
                         {isPaying ? (
                             <>
-                                <ActivityIndicator size="large" color="#0000ff" />
+                                <ActivityIndicator size="large" color="black" />
                                 <Text style={styles.modalText}>Processing Payment...</Text>
                             </>
                         ) : paymentSuccess ? (
                             <>
                                 <Text style={styles.modalText}>Payment Successful!</Text>
+                                <ScrollView style={styles.itemList}>
+                                {cartData.map((item, index) => (
+                                    <View key={index} style={styles.cartItem}>
+                                        <Text>{item.item} - {item.quantity}</Text>
+                                        <TouchableOpacity onPress={() => removeCartItem(index)}>
+                                            <Text style={styles.deleteButtonText}>Delete</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                ))}
+                                </ScrollView>
+                                <Text style={styles.qrMessage}>Scan the QR code on your way out</Text>
                                 <QRCode
                                     value={JSON.stringify(cartData)}
                                     size={200}
                                     backgroundColor='white'
                                     color='black'
                                 />
-                                {/* ... Render the rest of your receipt here ... */}
                                 <TouchableOpacity
                                     style={[styles.button, styles.buttonClose]}
                                     onPress={() => setPaymentSuccess(false)}>
@@ -148,25 +169,18 @@ const styles = StyleSheet.create({
         maxHeight: 300,
         marginBottom: 20,
     },
-    subtitle: {
-        fontSize: 18,
-        marginBottom: 10,
-    },
-    picker: {
-        height: 44,
-    },
     button1: {
         backgroundColor: 'black',
         padding: 15,
         borderRadius: 30,
-        width: '80%', // Adjust width as needed
+        width: '80%',
         alignItems: 'center',
         marginTop: 20,
-        alignSelf: 'center', // Center the button
+        alignSelf: 'center',
     },
     buttonText: {
         color: 'white',
-        fontSize: 18,
+        fontSize: 15,
     },
     centeredView: {
         flex: 1,
@@ -181,28 +195,28 @@ const styles = StyleSheet.create({
         padding: 35,
         alignItems: 'center',
         shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
+        shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.25,
         shadowRadius: 4,
         elevation: 5,
+        width: '90%',
+        maxHeight: '80%',
     },
-    modalText: {
-        marginBottom: 15,
-        textAlign: 'center',
-        fontSize: 18,
+    itemList: {
+        width: '100%',
+        maxHeight: 100,
+        marginBottom: 10,
     },
-    button: {
-        backgroundColor: 'black',
-        padding: 10,
-        borderRadius: 20,
-        elevation: 2,
+    itemDetail: {
+        fontSize: 16,
+    },
+    qrMessage: {
+        fontSize: 16,
         marginTop: 10,
+        marginBottom: 10,
     },
     buttonClose: {
-        backgroundColor: '#2196F3',
+        backgroundColor: 'black',
         paddingVertical: 10,
         paddingHorizontal: 20,
         width: '80%',
@@ -211,27 +225,6 @@ const styles = StyleSheet.create({
     textStyle: {
         color: 'white',
         fontWeight: 'bold',
-        textAlign: 'center',
-    },
-    cartItem: {
-        fontSize: 16,
-        marginVertical: 10,
-    },
-    buttonContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        position: 'absolute',
-        bottom: 40,
-        left: 10,
-        right: 10,
-    },
-    button: {
-        backgroundColor: 'black',
-        padding: 10,
-        borderRadius: 20,
-    },
-    buttonText: {
-        color: 'white',
         textAlign: 'center',
     },
     paymentMethodButton: {
@@ -248,8 +241,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         marginTop: 10,
         color: 'black',
-        marginBottom: 20, // Add space between the text and the button
-        marginTop: 20,
+        marginBottom: 20,
     },
     addPaymentMethodButton: {
         backgroundColor: 'black',
@@ -259,6 +251,38 @@ const styles = StyleSheet.create({
         width: '80%',
         alignItems: 'center',
         alignSelf: 'center',
+    },
+    buttonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        position: 'absolute',
+        bottom: 40,
+        left: 10,
+        right: 10,
+    },
+    button: {
+        backgroundColor: 'black',
+        padding: 10,
+        borderRadius: 20,
+    },
+    cartItemView: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        padding: 10,
+        borderBottomWidth: 1,
+        borderColor: '#ccc',
+    },
+    cartItem: {
+        fontSize: 16,
+    },
+    deleteButton: {
+        backgroundColor: 'black',
+        padding: 5,
+        borderRadius: 5,
+    },
+    deleteButtonText: {
+        color: 'white',
     },
 });
 

@@ -3,13 +3,7 @@ import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-nati
 import { useCart } from './CartContext';
 
 const CartScreen = ({ navigation, route }) => {
-    const { cartData, setCartData } = useCart();
-
-    useEffect(() => {
-        if (route.params?.cartData) {
-            setCartData(route.params.cartData);
-        }
-    }, [route.params?.cartData]);
+    const { cartData, removeCartItem } = useCart();
 
     return (
         <View style={{ flex: 1 }}>
@@ -29,6 +23,11 @@ const CartScreen = ({ navigation, route }) => {
                         <Text style={styles.itemText}>Item: {item.item}</Text>
                         <Text style={styles.itemText}>Qty: {item.quantity}</Text>
                         <Text style={styles.itemText}>Price: ${item.price}</Text>
+                        <TouchableOpacity 
+                            style={styles.deleteButton}
+                            onPress={() => removeCartItem(index)}>
+                            <Text style={styles.buttonText}>Delete</Text>
+                        </TouchableOpacity>
                     </View>
                 ))}
             </ScrollView>
@@ -87,10 +86,20 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         padding: 10,
         marginBottom: 10,
-        backgroundColor: '#fff', // Added for better visibility
+        backgroundColor: '#fff',
+        flexDirection: 'column', // Set flexDirection to column
+        justifyContent: 'center', // Center content vertically
     },
     itemText: {
         fontSize: 16,
+        marginBottom: 5, // Add a bottom margin for spacing
+    },
+    deleteButton: {
+        backgroundColor: 'black',
+        padding: 10,
+        borderRadius: 5,
+        marginTop: 10, // Adjust margin as needed
+        alignSelf: 'flex-end', // Align to the end of the itemBox
     },
     buttonContainer: {
         flexDirection: 'row',

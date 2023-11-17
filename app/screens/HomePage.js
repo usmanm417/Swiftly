@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, Modal, Image } from 'react-na
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import { firebase } from '../../config';
 import { collection, query, where, getDocs } from 'firebase/firestore';
+import { useCart } from './CartContext';
 
 const HomePage = ({ navigation }) => {
     const [hasPermission, setHasPermission] = useState(null);
@@ -10,7 +11,7 @@ const HomePage = ({ navigation }) => {
     const [text, setText] = useState('Not yet scanned');
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [itemDetails, setItemDetails] = useState({});
-    const [cartData, setCartData] = useState([]);
+    const { addCartItem } = useCart();
 
     const askForCameraPermission = () => {
         (async () => {
@@ -79,11 +80,10 @@ const HomePage = ({ navigation }) => {
             quantity: 1,
             price: itemDetails.price
         };
-        const updatedCartData = [...cartData, itemToAdd];
-        setCartData(updatedCartData); // Update the local cart data state
-        navigation.navigate('CartScreen', { cartData: updatedCartData }); // Pass updated cart data to CartScreen
+        addCartItem(itemToAdd); // Use addCartItem to update the cart
         setIsModalVisible(false);
-    };
+        navigation.navigate('CartScreen');
+    }; 
 
     // Main view
     return (

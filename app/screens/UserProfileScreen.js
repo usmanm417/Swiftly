@@ -11,7 +11,7 @@ const settingsOptions = [
 let Profile = "Profile";
 
 const ItemSeparator = () => { 
-    return <View style={styles.separator} />;
+  return <View style={styles.separator} />;
 } 
 
 const SettingsItem = ({ title, iconName, onPress }) => (
@@ -28,10 +28,10 @@ const UserProfileScreen = ({ navigation }) => {
       iconName={item.icon}
       onPress={() => navigation.navigate(item.target)}
     />
-  );
+);
 
-  return (
-    <SafeAreaView style={{ flex: 1 }}>
+return (
+  <SafeAreaView style={{ flex: 1 }}>
       <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('StoreSelect')}>
         <Text style={styles.buttonText}>Back</Text>
       </TouchableOpacity>
@@ -39,10 +39,10 @@ const UserProfileScreen = ({ navigation }) => {
         <Text style={styles.headerTitle}>Profile</Text>
       </View>
       <FlatList
-      data={settingsOptions}
-      renderItem={renderItem}
-      keyExtractor={item => item.title}
-      ItemSeparatorComponent={ItemSeparator}
+        data={settingsOptions}
+        renderItem={renderItem}
+        keyExtractor={item => item.title}
+        ItemSeparatorComponent={ItemSeparator}
       />
       <View style={styles.buttonContainer}>
                 <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('HomePage')}>
@@ -54,15 +54,13 @@ const UserProfileScreen = ({ navigation }) => {
                 <TouchableOpacity style={styles.button} onPress={() => console.log('Button Pressed')}>
                     <Text style={styles.buttonText}>Profile</Text>
                 </TouchableOpacity>
-            </View>
+      </View>
     </SafeAreaView>
-    
-    
   );
 };
 
 const styles = StyleSheet.create({
-headerContainer: {
+  headerContainer: {
     padding: 20, 
     marginTop: 45, 
     alignItems: 'center', 
@@ -70,7 +68,7 @@ headerContainer: {
     headerTitle: {
     fontSize: 24, // Adjust font size as needed
     fontWeight: 'bold',
-},
+  },
   item: {
     flexDirection: 'row',
     padding: 20,
@@ -95,16 +93,16 @@ headerContainer: {
     bottom: 40,
     left: 10,
     right: 10,
-},
-button: {
+  },
+  button: {
     backgroundColor: 'black',
     padding: 10,
     borderRadius: 20,
-},
-buttonText: {
+  },
+  buttonText: {
     color: 'white',
-},
-backButton: {
+  },
+  backButton: {
   position: 'absolute',
   top: 55,
   left: 20,
@@ -113,7 +111,7 @@ backButton: {
   borderRadius: 20,
   height: 35,
   justifyContent: 'center',
-},
+  },
 });
 
 export default UserProfileScreen;

@@ -94,9 +94,21 @@ const PaymentMethodScreen = ({ navigation }) => {
 
             <TouchableOpacity 
                 style={styles.backToCartButton}
-                onPress={() => navigation.navigate('CartScreen')}>
-                <Text style={styles.buttonText}>Back to Cart</Text>
+                onPress={() => navigation.navigate('CheckoutScreen')}>
+                <Text style={styles.buttonText}>Back to Checkout</Text>
             </TouchableOpacity>
+
+            <View style={styles.buttonContainer}>
+                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('HomePage')}>
+                    <Text style={styles.buttonText}>Scanner</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('CartScreen')}>
+                    <Text style={styles.buttonText}>Cart</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('UserProfileScreen')}>
+                    <Text style={styles.buttonText}>Profile</Text>
+                </TouchableOpacity>
+            </View>
         </View>
     );
 };
@@ -131,7 +143,7 @@ const styles = StyleSheet.create({
     },
     buttonText: {
         color: 'white',
-        fontSize: 18,
+        fontSize: 15,
     },
     backButton: {
         position: 'absolute',
@@ -146,6 +158,7 @@ const styles = StyleSheet.create({
     savedCardsContainer: {
         width: '100%',
         marginTop: 20,
+        height: 10,
     },
     card: {
         flexDirection: 'row',
@@ -176,10 +189,27 @@ const styles = StyleSheet.create({
         borderRadius: 25,
         position: 'absolute',
         bottom: 20,
-        width: '80%',
+        width: '60%',
         alignItems: 'center',
         alignSelf: 'center',
-    },    
+        marginBottom: 100,
+    },
+    buttonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        position: 'absolute',
+        bottom: 40,
+        left: 10,
+        right: 10,
+      },
+      button: {
+        backgroundColor: 'black',
+        padding: 10,
+        borderRadius: 20,
+      },
+      buttonText: {
+        color: 'white',
+      },
 });
 
 export default PaymentMethodScreen;

@@ -3,6 +3,7 @@ import { View, Text, Button, TextInput, StyleSheet, TouchableOpacity } from 'rea
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const RegisterScreen = ({ navigation }) => {
+    const [name, setName] = useState('');
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -14,7 +15,7 @@ const RegisterScreen = ({ navigation }) => {
     
 
     const handleRegister = async () => {
-        if (!username || !email || !password) {
+        if (!name || !username || !email || !password) {
             alert("Please fill all fields");
             return;
         }
@@ -25,7 +26,8 @@ const RegisterScreen = ({ navigation }) => {
         }
 
         try {
-            await AsyncStorage.setItem('userCredentials', JSON.stringify({ username, email, password }));
+            await AsyncStorage.setItem('userCredentials', JSON.stringify({ name, username, email, password }));
+            // Navigate to the next screen after saving user data
             navigation.navigate('StoreSelect');
         } catch (error) {
             console.error('Failed to save the data to the storage', error);
@@ -42,6 +44,11 @@ const RegisterScreen = ({ navigation }) => {
                     <Text style={styles.buttonText}>Back</Text>
             </TouchableOpacity>
             <Text style={styles.title}>Create an Account</Text>
+            <TextInput
+                style={styles.input}
+                placeholder="Name"
+                onChangeText={(text) => setName(text)}
+            />
             <TextInput
                 style={styles.input}
                 placeholder="Username"
