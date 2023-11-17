@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 const StoreSelect = () => {
     const [isDropdownVisible, setDropdownVisible] = useState(false);
     const [selectedItem, setSelectedItem] = useState('Select store  ▼');
-    const data = ['Adidas', 'Zara', 'WillOfGod', 'Nike'];
+    const data = ['With Jean', 'Guizio', 'WillOfGod', 'Adidas'];
     const navigation = useNavigation();
 
     const toggleDropdown = () => {

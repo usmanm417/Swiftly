@@ -1,10 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
+import { useCart } from './CartContext';
 
 const CartScreen = ({ navigation, route }) => {
-    // Initialize the cart data from the route parameters or use an empty array
-    const initialCartData = route.params?.cartData || [];
-    const [cartData, setCartData] = useState(initialCartData);
+    const { cartData, setCartData } = useCart();
+
+    useEffect(() => {
+        if (route.params?.cartData) {
+            setCartData(route.params.cartData);
+        }
+    }, [route.params?.cartData]);
 
     return (
         <View style={{ flex: 1 }}>
@@ -20,10 +25,10 @@ const CartScreen = ({ navigation, route }) => {
 
             <ScrollView style={styles.scrollView}>
                 {cartData.map((item, index) => (
-                    <View key={index} style={styles.tableRow}>
-                        <Text>{item.item}</Text>
-                        <Text>{item.quantity}</Text>
-                        <Text>{item.price}</Text>
+                    <View key={index} style={styles.itemBox}>
+                        <Text style={styles.itemText}>Item: {item.item}</Text>
+                        <Text style={styles.itemText}>Qty: {item.quantity}</Text>
+                        <Text style={styles.itemText}>Price: ${item.price}</Text>
                     </View>
                 ))}
             </ScrollView>
@@ -76,10 +81,16 @@ const styles = StyleSheet.create({
         flex: 1,
         marginTop: 20,
     },
-    tableRow: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
+    itemBox: {
+        borderWidth: 1,
+        borderColor: 'black',
+        borderRadius: 10,
         padding: 10,
+        marginBottom: 10,
+        backgroundColor: '#fff', // Added for better visibility
+    },
+    itemText: {
+        fontSize: 16,
     },
     buttonContainer: {
         flexDirection: 'row',

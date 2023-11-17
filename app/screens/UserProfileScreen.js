@@ -6,7 +6,6 @@ const settingsOptions = [
   { title: 'Personal Information', icon: 'user', target: 'PersonalInfoScreen' },
   { title: 'Saved Payment Methods', icon: 'credit-card', target: 'PaymentMethodScreen' },
   { title: 'Purchase History', icon: 'history', target: 'PurchaseHistoryScreen' },
-  { title: 'Wishlist', icon: 'heart', target: 'WishlistScreen' },
 ];
 
 let Profile = "Profile";
@@ -65,7 +64,7 @@ const UserProfileScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
 headerContainer: {
     padding: 20, 
-    marginTop: 70, 
+    marginTop: 45, 
     alignItems: 'center', 
     },
     headerTitle: {

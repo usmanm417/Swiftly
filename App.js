@@ -12,12 +12,14 @@ import PersonalInfoScreen from './app/screens/PersonalInfoScreen';
 import CheckoutScreen from './app/screens/CheckoutScreen';
 import PaymentMethodScreen from './app/screens/PaymentMethodScreen';
 import { PaymentMethodProvider } from './app/screens/PaymentMethodProvider';
+import { CartProvider } from './app/screens/CartContext';
 
 const Stack = createStackNavigator();
 
 export default function App() {
   return (
-    <PaymentMethodProvider>
+    <CartProvider>
+      <PaymentMethodProvider>
       <NavigationContainer>
         <Stack.Navigator initialRouteName="WelcomeScreen" screenOptions={{ headerShown: false }}>
             <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} />
@@ -33,5 +35,6 @@ export default function App() {
         </Stack.Navigator>
       </NavigationContainer>
     </PaymentMethodProvider>
+    </CartProvider>
   );
 }
