@@ -9,13 +9,13 @@ const LoginScreen = ({ navigation }) => {
     const handleLogin = async () => {
         try {
             const storedCredentials = await AsyncStorage.getItem('userCredentials');
+            console.log('Retrieved data:', storedCredentials); // Log to check
             const { username: storedUsername, password: storedPassword } = JSON.parse(storedCredentials || '{}');
-    
+        
             if (username === storedUsername && password === storedPassword) {
-                // User is authenticated
-                navigation.navigate('HomePage', { selectedStore: selectedItem });
+                navigation.navigate('StoreSelect');
             } else {
-                // Handle authentication failure
+                alert("Invalid credentials"); // Notify the user
             }
         } catch (error) {
             console.error('Failed to read the data from the storage', error);

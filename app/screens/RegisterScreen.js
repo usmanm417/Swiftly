@@ -27,7 +27,8 @@ const RegisterScreen = ({ navigation }) => {
 
         try {
             await AsyncStorage.setItem('userCredentials', JSON.stringify({ name, username, email, password }));
-            // Navigate to the next screen after saving user data
+            const savedData = await AsyncStorage.getItem('userCredentials');
+            console.log('Saved data:', savedData); // Log to check
             navigation.navigate('StoreSelect');
         } catch (error) {
             console.error('Failed to save the data to the storage', error);

@@ -3,7 +3,7 @@ import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Image } from 'rea
 import { useCart } from './CartContext';
 
 const CartScreen = ({ navigation, route }) => {
-    const { cartData, removeCartItem } = useCart();
+    const { cartData, removeCartItem} = useCart();
     const [total, setTotal] = useState(0);
 
     const setItemPicture = (itemName) => {
@@ -59,9 +59,9 @@ const CartScreen = ({ navigation, route }) => {
             <ScrollView style={styles.scrollView}>
                 {cartData.map((item, index) => (
                     <View key={index} style={styles.itemBox}>
-                        <Image source={setItemPicture(item.item)} style={styles.itemImage} />
+                        <Image source={setItemPicture(item.name)} style={styles.itemImage} />
                         <View style={styles.textContainer}>
-                            <Text style={styles.itemTextName}>{item.item}</Text>
+                            <Text style={styles.itemTextName}>{item.name}</Text>
                             <View style={styles.quantityContainer}>
                                 <TouchableOpacity
                                     style={styles.quantityButton}
@@ -85,12 +85,12 @@ const CartScreen = ({ navigation, route }) => {
             </ScrollView>
             <Text style={styles.totalText}>Total: ${total.toFixed(2)}</Text>
             <View style={styles.checkoutButtonContainer}>
-                <TouchableOpacity
+            <TouchableOpacity
                     style={styles.checkoutButton}
-                    onPress={() => navigation.navigate('CheckoutScreen', { cartData })}
+                    onPress={() => navigation.navigate('CheckoutScreen', { cartData, total })}
                 >
                     <Text style={styles.buttonText}>Checkout</Text>
-                </TouchableOpacity>
+            </TouchableOpacity>
             </View>
 
             <View style={styles.buttonContainer}>
@@ -125,10 +125,9 @@ const styles = StyleSheet.create({
         
     },
     title: {
-        fontSize: 35,
-      
-        textAlign: 'left'
-        
+        fontSize: 30,
+        textAlign: 'center',
+        fontWeight: 'bold',
     },
     scrollView: {
         flex: 1,
@@ -256,10 +255,9 @@ const styles = StyleSheet.create({
         borderRadius: 0,
     },
     totalText: {
-        paddingLeft: 245,
-        paddingBottom: 175,
+        paddingLeft: 215,
+        paddingBottom: 170,
         fontSize: 27,
-      
     }
 });
 

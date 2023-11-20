@@ -10,11 +10,8 @@ const HomePage = ({ navigation }) => {
     const [scanned, setScanned] = useState(false);
     const [text, setText] = useState('');
     const [isModalVisible, setIsModalVisible] = useState(false);
-    const [itemDetails, setItemDetails] = useState({});
-    const { addCartItem } = useCart();
+    const { addCartItem, itemDetails, updateItemDetails, clearItemDetails } = useCart();
     
-    
-
     const askForCameraPermission = () => {
         (async () => {
             const { status } = await BarCodeScanner.requestPermissionsAsync();
@@ -46,7 +43,7 @@ const HomePage = ({ navigation }) => {
                 setText('No item with this barcode exists in the database.');
             } else {
                 const doc = querySnapshot.docs[0]; // Assuming each barcode ID is unique
-                setItemDetails(doc.data());
+                updateItemDetails(doc.data()); // Update itemDetails in context
                 setIsModalVisible(true);
             }
         } catch (error) {
@@ -78,11 +75,12 @@ const HomePage = ({ navigation }) => {
 
     const addItemToCart = () => {
         const itemToAdd = {
-            item: itemDetails.name,
+            name: itemDetails.name,
             quantity: 1,
             price: itemDetails.price
         };
         addCartItem(itemToAdd); // Use addCartItem to update the cart
+        console.log(itemToAdd)
         setIsModalVisible(false);
         navigation.navigate('CartScreen');
     }; 
@@ -231,10 +229,12 @@ const styles = StyleSheet.create({
         paddingBottom: 100,
     },
     barcodeBox: {
+        marginTop: 30,
         alignItems: 'center',
         justifyContent: 'center',
-        height: 500,
-        width: '100%',
+        height: 390,
+        width: '95%',
+        borderRadius: 10,
         overflow: 'hidden',
         backgroundColor: 'gray',
     },

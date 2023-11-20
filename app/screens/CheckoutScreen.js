@@ -5,8 +5,8 @@ import { usePaymentMethods } from './PaymentMethodProvider';
 import { useCart } from './CartContext';
 import { usePurchaseHistory } from './PurchaseHistoryContext';
 
-const CheckoutScreen = ({ navigation, route }) => {
-    const { cartData, removeCartItem } = useCart();
+const CheckoutScreen = ({ navigation }) => {
+    const { cartData, removeCartItem, total } = useCart();
     const { paymentMethods } = usePaymentMethods();
     const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(paymentMethods?.[0]?.cardNumber || '');
     const [isPaying, setIsPaying] = useState(false);
@@ -37,7 +37,7 @@ const CheckoutScreen = ({ navigation, route }) => {
             <ScrollView style={styles.cartItemsContainer}>
                 {cartData.map((item, index) => (
                     <View key={index} style={styles.cartItemView}>
-                        <Text style={styles.cartItem}>{item.item} - {item.quantity}</Text>
+                        <Text style={styles.cartItem}>{item.name} - {item.quantity}</Text>
                         <TouchableOpacity 
                             style={styles.deleteButton}
                             onPress={() => removeCartItem(index)}>
@@ -49,7 +49,7 @@ const CheckoutScreen = ({ navigation, route }) => {
                 ))}
                 
             </ScrollView>
-            <Text style={styles.total}>Total: $149</Text>
+            <Text style={styles.total}>Total: ${total.toFixed(2)}</Text>
             {paymentMethods.length === 0 ? (
                 <TouchableOpacity
                     style={styles.addPaymentMethodButton}
@@ -204,8 +204,8 @@ const styles = StyleSheet.create({
         borderColor: '#000',
         borderRadius: 0,
         width: '100%',
-        maxHeight: 100,
-        marginBottom: 206,
+        maxHeight: 300,
+        marginBottom: 1,
         backgroundColor: 'white',
         
     },
@@ -213,9 +213,8 @@ const styles = StyleSheet.create({
         backgroundColor: 'black',
         padding: 15,
         borderRadius: 30,
-        width: '150%',
+        width: '90%', // Adjusted width
         alignItems: 'center',
-        marginTop: 85,
         alignSelf: 'center',
     },
     button2: {
@@ -224,7 +223,6 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         width: '150%',
         alignItems: 'center',
-        marginTop: 85,
         alignSelf: 'center',
     },
     buttonText: {
@@ -300,13 +298,14 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     addPaymentMethodButton: {
-        backgroundColor: 'black',
+        backgroundColor: 'black', // Match the color with Pay Now button
         padding: 15,
         borderRadius: 30,
-        marginTop: 20,
-        width: '100%',
+        width: '90%', // Match the width with Pay Now button
         alignItems: 'center',
         alignSelf: 'center',
+        marginTop: 30, // Increased from the previous value for more space
+        marginBottom: 10, // Adjust as needed to create space above the "Pay Now" button
     },
     buttonContainer: {
         flexDirection: 'row',
@@ -353,11 +352,12 @@ const styles = StyleSheet.create({
         bottom: 120, // Adjust this value based on the height of your button container
       },
       total: {
-        marginTop: -190,
-        marginLeft: 250,
+        position: 'absolute',
+        bottom: 130,  // Adjust this value to move the total text down
+        right: 20,    // Adjust for alignment, if necessary
         fontSize: 22,
-        marginBottom: 243
-      },
+        color: 'black', // Or any color you prefer
+        },
 });
 
 export default CheckoutScreen;

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Image, StyleSheet, Text, View, TextInput, TouchableOpacity, ScrollView, Keyboard } from 'react-native';
 import { usePaymentMethods } from './PaymentMethodProvider';
 
-const PaymentMethodScreen = ({ navigation }) => {
+const PaymentMethodScreen = ({ navigation, route }) => {
     const [cardNumber, setCardNumber] = useState('');
     const [expiryDate, setExpiryDate] = useState('');
     const [cvv, setCvv] = useState('');
@@ -70,7 +70,7 @@ const PaymentMethodScreen = ({ navigation }) => {
                 value={cvv}
                 onChangeText={setCvv}
             />
-            <TouchableOpacity style={styles.button} onPress={handleSave}>
+            <TouchableOpacity style={styles.button4} onPress={handleSave}>
                 <Text style={styles.buttonText}>Save Card</Text>
             </TouchableOpacity>
 
@@ -143,9 +143,18 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         padding: 10,
     },
-   
+    button4: {
+        backgroundColor: 'black', // Set the background color to black
+        paddingVertical: 15,      // Vertical padding
+        paddingHorizontal: 30,    // Horizontal padding
+        borderRadius: 5,          // Rounded corners
+        alignItems: 'center',     // Center text horizontally
+        justifyContent: 'center', // Center text vertically
+        width: '100%',            // Full width
+        marginBottom: 20,         // Margin at the bottom
+    },
     buttonText: {
-        color: 'white',
+        color: 'black',
         fontSize: 15,
     },
     backButton: {
@@ -159,7 +168,6 @@ const styles = StyleSheet.create({
     },
     savedCardsContainer: {
         width: '100%',
-        marginTop: 20,
         height: 10,
     },
     card: {

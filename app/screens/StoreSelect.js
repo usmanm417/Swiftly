@@ -9,15 +9,13 @@ import {
   Text,
   View,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 
 const windowWidth = Dimensions.get('window').width;
 
-const StoreSelect = () => {
+const StoreSelect = ({navigation}) => {
   const [isDropdownVisible, setDropdownVisible] = useState(false);
   const [selectedItem, setSelectedItem] = useState('Select store & location  ▼');
   const data = ['Zara (3500 Peachtree Rd NE)', 'H&M (675 Ponce De Leon Ave NE)', 'Mango (3535 Peachtree Rd NE)', 'Aritzia (3393 Peachtree Rd NE)'];
-  const navigation = useNavigation();
 
   const toggleDropdown = () => {
     setDropdownVisible(!isDropdownVisible);
@@ -32,16 +30,15 @@ const StoreSelect = () => {
     navigation.navigate('HomePage', { selectedStore: selectedItem });
   };
 
-  const handleGoBack = () => {
-    navigation.goBack();
-  };
-
   return (
     <ImageBackground
       source={require("../assets/selectstore.jpeg")} // Replace with the correct path to your image
       style={styles.background}
     >
-      <TouchableOpacity onPress={handleGoBack} style={styles.backButton}>
+      <TouchableOpacity onPress={() => {
+        console.log('Back button pressed');
+        navigation.navigate('RegisterScreen');
+      }} style={styles.backButton}>
         <Image source={require("../assets/backarrow.png")} style={styles.backButtonImage} />
       </TouchableOpacity>
 
@@ -94,8 +91,8 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   backButton: {
+    marginTop: 50,
     position: 'absolute',
-    top: 31,
     left: -13,
     paddingLeft: 25,
   },
@@ -104,8 +101,10 @@ const styles = StyleSheet.create({
     height: 30,
   },
   headerContainer: {
+    flex: 1, // Use flex to adjust the size dynamically
+    justifyContent: 'center',
+    alignItems: 'center',
     paddingTop: 35,
-    marginTop: 60,
   },
   headerText: {
     fontSize: 22,
@@ -153,22 +152,19 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   footer: {
-    position: 'absolute',
-    width: '100%',
-    bottom: 0,
-    padding: 20,
+    flex: 0.5, // Adjust the flex value to position the footer correctly
     justifyContent: 'center',
     alignItems: 'center',
-    paddingBottom:55,
+    width: '100%',
+    padding: 20,
   },
   selectStoreButton: {
     backgroundColor: 'black',
     paddingVertical: 15,
-    width: '100%',
+    width: '90%', // Use percentage for width
     borderWidth: 1,
     borderRadius: 0,
     alignItems: 'center',
-    marginBottom: 315,
   },
   selectStoreButtonText: {
     color: 'white',
