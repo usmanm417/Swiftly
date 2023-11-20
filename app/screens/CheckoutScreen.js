@@ -41,7 +41,7 @@ const CheckoutScreen = ({ navigation }) => {
                         <TouchableOpacity 
                             style={styles.deleteButton}
                             onPress={() => removeCartItem(index)}>
-                            <Text style={styles.deleteButtonText}>Remove</Text>
+                            <Image source={require("../assets/trash.png")} style={styles.trashButton} />
                         </TouchableOpacity>
                         
                     </View>
@@ -68,7 +68,9 @@ const CheckoutScreen = ({ navigation }) => {
                     ) : null}
                 </View>
             )}
-
+            <Text style={styles.selectCard}>
+                                    Select Card
+                                </Text>
             <TouchableOpacity style={styles.button1} onPress={handleCheckout}>
                 <Text style={styles.buttonTextPaymentMethod}>Pay Now</Text>
             </TouchableOpacity>
@@ -80,6 +82,7 @@ const CheckoutScreen = ({ navigation }) => {
                 onRequestClose={() => setShowPaymentMethods(false)}>
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
+                                
                         {paymentMethods.map((method, index) => (
                             <TouchableOpacity 
                                 key={index}
@@ -87,12 +90,18 @@ const CheckoutScreen = ({ navigation }) => {
                                 onPress={() => {
                                     setSelectedPaymentMethod(method.cardNumber);
                                     setShowPaymentMethods(false);
-                                }}>
+                                    console.log(method);
+                                }
+                                }
+                                
+                                >
+                                
                                 <Text style={styles.paymentMethodText}>
                                     Card ending in {method.cardNumber.substr(-4)}
                                 </Text>
+                                
                             </TouchableOpacity>
-                        ))}
+                        ) ) }
                     </View>
                 </View>
             </Modal>
@@ -170,6 +179,15 @@ const CheckoutScreen = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
+    selectCard: {
+        color: 'black',
+        fontSize: '25',
+    },
+    trashButton: {
+        width: 21,
+        height: 21,
+        resizeMode: 'stretch',
+    },
     summary: {
         alignSelf: 'flex-start',
         fontSize: 22,
@@ -211,9 +229,8 @@ const styles = StyleSheet.create({
     },
     button1: {
         backgroundColor: 'black',
-        padding: 15,
-        borderRadius: 30,
-        width: '90%', // Adjusted width
+        padding: 19,
+        width: '100%', // Adjusted width
         alignItems: 'center',
         alignSelf: 'center',
     },
@@ -285,7 +302,7 @@ const styles = StyleSheet.create({
         padding: 10,
         borderRadius: 10,
         marginTop: 10,
-        width: '200%'
+        width: '100%'
     },
     paymentMethodText: {
         textAlign: 'center',
@@ -299,9 +316,8 @@ const styles = StyleSheet.create({
     },
     addPaymentMethodButton: {
         backgroundColor: 'black', // Match the color with Pay Now button
-        padding: 15,
-        borderRadius: 30,
-        width: '90%', // Match the width with Pay Now button
+        padding: 19,
+        width: '100%', // Match the width with Pay Now button
         alignItems: 'center',
         alignSelf: 'center',
         marginTop: 30, // Increased from the previous value for more space

@@ -33,7 +33,7 @@ const UserProfileScreen = ({ navigation }) => {
 return (
   <SafeAreaView style={{ flex: 1 }}>
       <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('StoreSelect')}>
-      <Image source={require("../assets/backarrow.png")} style={styles.backButton} />
+        <Image source={require("../assets/backarrow.png")} style={styles.backButton} />
       </TouchableOpacity>
       <View style={styles.headerContainer}>
         <Text style={styles.headerTitle}>Profile</Text>
@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
     padding: 10,
     width: 35,
     height: 35,
-    resizeMode: 'stretch',
+    resizeMode: 'contain',
 },
 bottomButton: {
   height: 45,

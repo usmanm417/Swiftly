@@ -15,7 +15,7 @@ const windowWidth = Dimensions.get('window').width;
 const StoreSelect = ({navigation}) => {
   const [isDropdownVisible, setDropdownVisible] = useState(false);
   const [selectedItem, setSelectedItem] = useState('Select store & location  ▼');
-  const data = ['Zara (3500 Peachtree Rd NE)', 'H&M (675 Ponce De Leon Ave NE)', 'Mango (3535 Peachtree Rd NE)', 'Aritzia (3393 Peachtree Rd NE)'];
+  const data = ['With Jean (3500 Peachtree Rd NE)', 'Guizio (675 Ponce De Leon Ave NE)', 'Mango (3535 Peachtree Rd NE)', 'Aritzia (3393 Peachtree Rd NE)'];
 
   const toggleDropdown = () => {
     setDropdownVisible(!isDropdownVisible);

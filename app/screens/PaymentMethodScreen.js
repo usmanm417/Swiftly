@@ -33,7 +33,7 @@ const PaymentMethodScreen = ({ navigation, route }) => {
 
     return (
         <View style={styles.container}>
-            <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('UserProfileScreen')}>
+            <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('CartScreen')}>
             <Image source={require("../assets/backarrow.png")} style={styles.backButton} />
             </TouchableOpacity>
             <Text style={styles.title}>Add Payment Method</Text>
