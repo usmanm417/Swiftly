@@ -4,65 +4,45 @@ import { useCart } from './CartContext';
 
 const CartScreen = ({ navigation, route }) => {
     const { cartData, removeCartItem } = useCart();
-    let [hudsonminiskirtQuantity, setHudsonminiskirtQuantity ] = useState(1);
-    let [tightpurpleskirtQuantity, setTightpurpleskirtQuantity ] = useState(1);
-    const initialState = true;
-    let [total, setTotal] = useState(0); // add functionality for this
+    const [total, setTotal] = useState(0);
 
-    const setQuantityMinus = (itemID, index) => {
-        if (itemID === 'Hudson Mini Skirt' && hudsonminiskirtQuantity > 0) {
-            let newQuantity = hudsonminiskirtQuantity - 1;
-            let newTotal = total - 149;
-            setTotal(newTotal);
-            setHudsonminiskirtQuantity(newQuantity);
-            if (newQuantity === 0) {
+    const setItemPicture = (itemName) => {
+        switch (itemName) {
+            case 'Hudson Mini Skirt':
+                return require("../assets/hudsonminiskirt-removebg-preview.png");
+            case 'Micro Mini Stretch Skirt':
+                return require("../assets/tightpurpleskirt-removebg-preview.png");
+            // Add more cases for other items as needed
+            default:
+                // Return a default image or handle this case accordingly
+                return require("../assets/logo.png");
+        }
+    };
+
+    useEffect(() => {
+        // Calculate the total price based on items in the cart
+        const newTotal = cartData.reduce((acc, item) => acc + item.price * item.quantity, 0);
+        setTotal(newTotal);
+    }, [cartData]);
+
+
+
+    const setQuantityMinus = (item, index) => {
+        if (item.quantity > 0) {
+            const updatedCartData = [...cartData];
+            updatedCartData[index].quantity -= 1;
+            setTotal(total - item.price);
+            if (updatedCartData[index].quantity === 0) {
                 removeCartItem(index);
             }
-        } else if (itemID === 'Micro Mini Stretch Skirt' && tightpurpleskirtQuantity > 0) {
-            let newQuantity = tightpurpleskirtQuantity - 1;
-            let newTotal = total - 128;
-            setTotal(newTotal);
-            setTightpurpleskirtQuantity(newQuantity);
-            if (newQuantity === 0) {
-                removeCartItem(index);
-            }
-        };
-    }
-    
-    const setQuantityPlus = (itemID) => {
-        if (itemID === 'Hudson Mini Skirt') {
-            let newTotal = total + 149;
-            setTotal(newTotal);
-            setHudsonminiskirtQuantity(prevCount => prevCount + 1);
-        } else if (itemID === 'Micro Mini Stretch Skirt') {
-            let newTotal = total + 128;
-            setTotal(newTotal);
-            setTightpurpleskirtQuantity(prevCount1 => prevCount1 + 1);
-        };
-    }
-
-    const setQuantityDisplay = (itemID) => {
-        let returnedNumber = 1;
-        if (itemID === 'Hudson Mini Skirt') {
-            returnedNumber = hudsonminiskirtQuantity;
-            total + 149;
-        } else if (itemID === 'Micro Mini Stretch Skirt') {
-            returnedNumber = tightpurpleskirtQuantity;
-            total + 128;  
         }
-        return returnedNumber;
-        };
+    };
 
-
-    const setItemPicture = (itemID) => {
-        let returnedImage = 0;
-        if (itemID === 'Hudson Mini Skirt') {
-            returnedImage = require("../assets/hudsonminiskirt-removebg-preview.png");
-        } else if (itemID === 'Micro Mini Stretch Skirt') {
-            returnedImage = require("../assets/tightpurpleskirt-removebg-preview.png");
-        }
-        return returnedImage;
-        }; 
+    const setQuantityPlus = (item, index) => {
+        const updatedCartData = [...cartData];
+        updatedCartData[index].quantity += 1;
+        setTotal(total + item.price);
+    };
 
     return (
         <View style={{ flex: 1 }}>
@@ -85,14 +65,14 @@ const CartScreen = ({ navigation, route }) => {
                             <View style={styles.quantityContainer}>
                                 <TouchableOpacity
                                     style={styles.quantityButton}
-                                    onPress={() => setQuantityMinus(item.item, index)}
+                                    onPress={() => setQuantityMinus(item, index)}
                                 >
                                     <Image source={require("../assets/minus.svg.png")} style={styles.quantityIconMinus} />
                                 </TouchableOpacity>
-                                <Text style={styles.itemTextQuantity}>{setQuantityDisplay(item.item)}</Text>
+                                <Text style={styles.itemTextQuantity}>{item.quantity}</Text>
                                 <TouchableOpacity
                                     style={styles.quantityButton}
-                                    onPress={() => setQuantityPlus(item.item)}
+                                    onPress={() => setQuantityPlus(item, index)}
                                 >
                                     <Image source={require("../assets/plus.png")} style={styles.quantityIconPlus} />
                                 </TouchableOpacity>
@@ -103,7 +83,7 @@ const CartScreen = ({ navigation, route }) => {
                     </View>
                 ))}
             </ScrollView>
-            <Text style={styles.totalText}>Total: $149</Text>
+            <Text style={styles.totalText}>Total: ${total.toFixed(2)}</Text>
             <View style={styles.checkoutButtonContainer}>
                 <TouchableOpacity
                     style={styles.checkoutButton}
@@ -136,7 +116,6 @@ const CartScreen = ({ navigation, route }) => {
         </View>
     );
 };
-
 const styles = StyleSheet.create({
     header: {
         paddingTop: 100,
