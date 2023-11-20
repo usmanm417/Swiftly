@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Button, TouchableOpacity, StyleSheet } from 'react-native';
+import { Image, View, Text, TextInput, Button, TouchableOpacity, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const PersonalInfoScreen = ({ navigation, route }) => {
@@ -38,7 +38,7 @@ const handleSave = (field) => {
 return (
     <View style={styles.container}>
         <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('UserProfileScreen')}>
-            <Text style={styles.buttonText}>Back</Text>
+        <Image source={require("../assets/backarrow.png")} style={styles.backButton} />
         </TouchableOpacity>
         <Text style={styles.screenTitle}>Personal Information</Text>
         <EditableField
@@ -74,22 +74,33 @@ return (
             onSave={() => handleSave('phoneNumber')}
         />
         <View style={styles.buttonContainer}>
-                    <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('HomePage')}>
-                        <Text style={styles.buttonText}>Scanner</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('CartScreen')}>
-                        <Text style={styles.buttonText}>Cart</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('UserProfileScreen')}>
-                        <Text style={styles.buttonText}>Profile</Text>
-                    </TouchableOpacity>
+        <View style={styles.line}></View>
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => navigation.navigate('HomePage')}
+                >
+                    <Image source={require("../assets/scannerButton.png")} style={styles.bottomButton} />
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => navigation.navigate('CartScreen')}
+                >
+                    <Image source={require("../assets/cart.png")} style={styles.bottomButton} />
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => navigation.navigate('UserProfileScreen')}
+                >
+                    <Image source={require("../assets/profile.png")} style={styles.bottomButton} />
+                </TouchableOpacity>
+            </View>
         </View>
-    </View>
   );
 };
 
 const EditableField = ({ label, value, isEditing, onChangeText, onEdit, onSave }) => (
     <View style={styles.fieldContainer}>
+    
         <Text style={styles.label}>{label}</Text>
         <View style={styles.valueContainer}>
         {isEditing ? (
@@ -109,14 +120,14 @@ const EditableField = ({ label, value, isEditing, onChangeText, onEdit, onSave }
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 20,
+        padding: 25,
     },
     screenTitle: {
         fontSize: 24,
         fontWeight: 'bold',
         marginBottom: 10, // Space between title and fields
         textAlign: 'center', // Center text horizontally
-        marginTop: 15,
+        marginTop: 55,
     },
     fieldContainer: {
         flexDirection: 'row',
@@ -142,17 +153,27 @@ const styles = StyleSheet.create({
         marginRight: 10,
     },
     backButton: {
-        backgroundColor: 'black',
-        paddingHorizontal: 10,
-        paddingVertical: 5,
-        borderRadius: 20,
-        alignSelf: 'flex-start',
-        marginBottom: 10,
-        marginTop: 40,
+        position: 'absolute',
+        top: 20,
+        left: 10,
+        padding: 10,
+        width: 35,
+        height: 35,
+        resizeMode: 'stretch',
     },
     buttonText: {
         color: 'white',
     },
+    line: {
+        backgroundColor: 'gray',
+        height: 1,
+        width: '200%', // The line will extend to the full width of the container
+        position: 'absolute',
+        bottom: 80, // Position the line above the buttons
+        left: -25, // Counteract the container's padding on the left
+        right: -25, // Counteract the container's padding on the right
+    },
+
     buttonContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -160,14 +181,19 @@ const styles = StyleSheet.create({
         bottom: 40,
         left: 10,
         right: 10,
+        paddingHorizontal: 30,
       },
     button: {
-        backgroundColor: 'black',
         padding: 10,
         borderRadius: 20,
     },
     buttonText: {
         color: 'white',
+    },
+    bottomButton: {
+        height: 45, // Set the fixed height for the image
+        width: 45, // Set the fixed width for the image
+        resizeMode: 'contain', // This will ensure the image scales within the given dimensions
     },
 });
 

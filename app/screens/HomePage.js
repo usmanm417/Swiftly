@@ -8,10 +8,12 @@ import { useCart } from './CartContext';
 const HomePage = ({ navigation }) => {
     const [hasPermission, setHasPermission] = useState(null);
     const [scanned, setScanned] = useState(false);
-    const [text, setText] = useState('Not yet scanned');
+    const [text, setText] = useState('');
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [itemDetails, setItemDetails] = useState({});
     const { addCartItem } = useCart();
+    
+    
 
     const askForCameraPermission = () => {
         (async () => {
@@ -85,25 +87,38 @@ const HomePage = ({ navigation }) => {
         navigation.navigate('CartScreen');
     }; 
 
+    const setItemPicture = (barcodeId) => {
+        let returnedImage = 0;
+        if (barcodeId === '9353636023419') {
+            returnedImage = require("../assets/hudsonminiskirt.png");
+        } else if (barcodeId === '0197346016694') {
+            returnedImage = require("../assets/tightpurpleskirt.png")
+        }
+        return returnedImage;
+    };
+    
+
     // Main view
     return (
         <View style={styles.container}>
             <View style={styles.header}>
                 <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('StoreSelect')}>
-                    <Text style={styles.buttonText}>Back</Text>
+                    <Image source={require("../assets/backarrow.png")} style={styles.backButton} />
                 </TouchableOpacity>
             </View>
-            <Text style={styles.title}>Scan Items Below!</Text>
+          
             <View style={styles.barcodeBox}>
                 <BarCodeScanner onBarCodeScanned={scanned ? undefined : handleBarCodeScanned} style={styles.barcodeScanner} />
             </View>
-            <Text style={styles.maintext}>{text}</Text>
-
             {scanned && (
-                <TouchableOpacity style={styles.button} onPress={() => setScanned(false)}>
-                    <Text style={styles.buttonText}>Scan again?</Text>
+                <TouchableOpacity style={styles.buttonScanAgain} onPress={() => setScanned(false)}>
+                    <Text style={styles.buttonTextScanAgain}>Click to scan again</Text>
                 </TouchableOpacity>
             )}
+            <Text style={styles.title}>See something you like? Scan the tag!</Text>
+          
+
+            
 
             <Modal
                 animationType="slide"
@@ -113,43 +128,73 @@ const HomePage = ({ navigation }) => {
             >
                 <View style={styles.centeredView}>
                 <View style={styles.modalView}>
-                    <Image source={{ uri: itemDetails.imageUrl }} style={styles.itemImage} />
+                    <TouchableOpacity style={styles.backBut}
+                        onPress={() => setIsModalVisible(false)}>
+                    
+                        <Image source={require("../assets/backarrow.png")} style={styles.backButton} />
+                    </TouchableOpacity>
+                    <Image source={setItemPicture(itemDetails.itemID)} style={styles.itemImage} />
                     <Text style={styles.itemTitle}>{itemDetails.name}</Text>
-                    <Text style={styles.itemDetail}>Color: {itemDetails.color}</Text>
-                    <Text style={styles.itemDetail}>Description: {itemDetails.description}</Text>
-                    <Text style={styles.itemDetail}>Material: {itemDetails.material}</Text>
-                    <Text style={styles.itemDetail}>Size: {itemDetails.size}</Text>
                     <Text style={styles.itemDetail}>Price: ${itemDetails.price}</Text>
-                    <Text style={styles.itemDetail}>Store: {itemDetails.store}</Text>
+                    <Text style={styles.itemDetail}>Size: {itemDetails.size}</Text>
+                    <Text style={styles.itemDetail}>Color: {itemDetails.color}</Text>
+                    <Text style={styles.itemDetail}>Material: {itemDetails.material}</Text>
+                    
                     <View style={styles.buttonRow}>
+                    
                     <TouchableOpacity
-                        style={[styles.modalButton, styles.buttonYes]}
+                        style={styles.modalButtonAdd}
                         onPress={() => {
                         addItemToCart()
                         }}
                     >
                         <Text style={styles.buttonText}>Add to Cart</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity
-                        style={[styles.modalButton, styles.buttonNo]}
-                        onPress={() => setIsModalVisible(false)}
-                    >
-                        <Text style={styles.buttonText}>Cancel</Text>
-                    </TouchableOpacity>
+                        <View style={styles.buttonContainerModal}>
+                            <TouchableOpacity
+                                style={styles.bottomButtonModal}
+                                onPress={() => navigation.navigate('HomePage')}
+                            >
+                                <Image source={require("../assets/scannerButton.png")} style={styles.bottomButton} />
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={styles.bottomButtonModal}
+                                onPress={() => console.log('Button Pressed')}
+                            >
+                                <Image source={require("../assets/cart.png")} style={styles.bottomButton} />
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={styles.bottomButtonModal}
+                                onPress={() => navigation.navigate('UserProfileScreen')}
+                            >
+                                <Image source={require("../assets/profile.png")} style={styles.bottomButton} />
+                            </TouchableOpacity>
+            </View>
                     </View>
                 </View>
                 </View>
             </Modal>
-
+            
+            <View style={styles.line}></View>
+            
             <View style={styles.buttonContainer}>
-                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('HomePage')}>
-                    <Text style={styles.buttonText}>Scanner</Text>
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => navigation.navigate('HomePage')}
+                >
+                    <Image source={require("../assets/scannerButton.png")} style={styles.bottomButton} />
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('CartScreen')}>
-                    <Text style={styles.buttonText}>Cart</Text>
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => navigation.navigate('CartScreen')}
+                >
+                    <Image source={require("../assets/cart.png")} style={styles.bottomButton} />
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('UserProfileScreen')}>
-                    <Text style={styles.buttonText}>Profile</Text>
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => navigation.navigate('UserProfileScreen')}
+                >
+                    <Image source={require("../assets/profile.png")} style={styles.bottomButton} />
                 </TouchableOpacity>
             </View>
         </View>
@@ -157,6 +202,27 @@ const HomePage = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
+    bottomButtonModal: {
+        height: 65,
+        width: 65,
+        marginRight: 25,
+        marginLeft: 45,
+        resizeMode: 'contain',
+        paddingTop: 25,
+        borderRadius: 0
+    },
+    modalButtonAdd: {
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        width: '500%',
+        elevation: 2,
+        borderRadius: 0,
+        backgroundColor: 'black'
+    },
+    backBut: {
+        alignSelf:'flex-start',
+        marginLeft: -40,
+    },
     container: {
         flex: 1,
         backgroundColor: '#fff',
@@ -167,10 +233,9 @@ const styles = StyleSheet.create({
     barcodeBox: {
         alignItems: 'center',
         justifyContent: 'center',
-        height: 350,
-        width: 320,
+        height: 500,
+        width: '100%',
         overflow: 'hidden',
-        borderRadius: 30,
         backgroundColor: 'gray',
     },
     maintext: {
@@ -178,25 +243,32 @@ const styles = StyleSheet.create({
         margin: 20,
     },
     title: {
-        fontWeight: 'bold',
-        fontSize: 20,
+        fontSize: 30,
         margin: 20,
+        textAlign: 'center'
     },
     header: {
         position: 'absolute',
         top: 30, 
         left: 20,
         zIndex: 1,
+        alignItems: 'center'
     },
+    line: {
+        backgroundColor: 'gray',
+        height: 1,
+        width: '100%',
+        position: 'absolute',
+        bottom: 120, // Adjust this value based on the height of your button container
+      },
     backButton: {
-        backgroundColor: 'black',
+        position: 'absolute',
+        top: 0,
+        left: -5,
         padding: 10,
-        borderRadius: 20,
-        width: 60,
-        height: 40,
-        marginTop: 20,
-        alignItems: 'center',
-        justifyContent: 'center',
+        width: 30,
+        height: 30,
+        resizeMode: 'stretch',
     },
     buttonContainer: {
         flexDirection: 'row',
@@ -205,16 +277,44 @@ const styles = StyleSheet.create({
         bottom: 40,
         left: 10,
         right: 10,
+        paddingHorizontal: 30,
+    },
+    buttonContainerModal: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        position: 'absolute',
+        bottom: -55,
+        left: -51,
+        right: 10,
+        marginTop: 70,
     },
     button: {
-        backgroundColor: 'black',
         padding: 10,
         borderRadius: 20,
+    },
+    buttonScanAgain: {
+        borderWidth: 3,
+        borderColor: 'black',
+        padding: 10,
+        left: 0,
+        top: -275,
+    },
+    button1: {
+        padding: 10,
+        borderRadius: 20,
+        marginTop: 45
     },
     buttonText: {
         color: 'white',
         textAlign: 'center',
+        fontSize: 25,
     },
+    buttonTextScanAgain: {
+        color: 'black',
+        textAlign: 'center',
+        fontSize: 35,
+    },
+
     barcodeScanner: {
         height: '100%',
         width: '100%',
@@ -226,10 +326,11 @@ const styles = StyleSheet.create({
     },
     modalView: {
         margin: 20,
-        width: '80%', // Set a fixed width for the modal
+        width: '100%', // Set a fixed width for the modal
+        height: '105%',
         backgroundColor: 'white',
-        borderRadius: 20,
-        padding: 35,
+        borderRadius: 0,
+        padding: 55,
         alignItems: 'center',
         shadowColor: '#000',
         shadowOffset: {
@@ -242,8 +343,9 @@ const styles = StyleSheet.create({
         borderWidth: 1,
     },
     itemDetail: {
-        fontSize: 16,
+        fontSize: 17,
         marginVertical: 4,
+        marginTop: 0,
     },
     buttonRow: {
         flexDirection: 'row',
@@ -264,15 +366,28 @@ const styles = StyleSheet.create({
         backgroundColor: 'red', // A red color for cancellation
     },
     itemImage: {
-        width: 200,
-        height: 200,
-        resizeMode: 'contain',
-        marginBottom: 20,
+        marginTop: 50,
+        paddingTop: 100,
+        paddingBottom: 50,
+        width: 350,
+        height: 500,
+        resizeMode: 'cover',
+        marginBottom: 5,
+        borderColor: 'black',
+        borderWidth: 1,
+        backgroundColor: 'gray',
     },
     itemTitle: {
         fontWeight: 'bold',
         fontSize: 22,
         marginBottom: 10,
+    },
+    bottomButton: {
+        height: 45,
+        width: 45,
+        resizeMode: 'contain',
+        paddingTop: 25,
+        borderRadius: 0
     },
 });
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, ScrollView, Keyboard } from 'react-native';
+import { Image, StyleSheet, Text, View, TextInput, TouchableOpacity, ScrollView, Keyboard } from 'react-native';
 import { usePaymentMethods } from './PaymentMethodProvider';
 
 const PaymentMethodScreen = ({ navigation }) => {
@@ -34,7 +34,7 @@ const PaymentMethodScreen = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('UserProfileScreen')}>
-                <Text style={styles.buttonText}>Back</Text>
+            <Image source={require("../assets/backarrow.png")} style={styles.backButton} />
             </TouchableOpacity>
             <Text style={styles.title}>Add Payment Method</Text>
             <TextInput
@@ -97,16 +97,25 @@ const PaymentMethodScreen = ({ navigation }) => {
                 onPress={() => navigation.navigate('CheckoutScreen')}>
                 <Text style={styles.buttonText}>Back to Checkout</Text>
             </TouchableOpacity>
-
+            
             <View style={styles.buttonContainer}>
-                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('HomePage')}>
-                    <Text style={styles.buttonText}>Scanner</Text>
+            <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => navigation.navigate('HomePage')}
+                >
+                    <Image source={require("../assets/scannerButton.png")} style={styles.bottomButton} />
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('CartScreen')}>
-                    <Text style={styles.buttonText}>Cart</Text>
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => console.log('Button Pressed')}
+                >
+                    <Image source={require("../assets/cart.png")} style={styles.bottomButton} />
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('UserProfileScreen')}>
-                    <Text style={styles.buttonText}>Profile</Text>
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => navigation.navigate('UserProfileScreen')}
+                >
+                    <Image source={require("../assets/profile.png")} style={styles.bottomButton} />
                 </TouchableOpacity>
             </View>
         </View>
@@ -134,26 +143,19 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         padding: 10,
     },
-    button: {
-        backgroundColor: 'black',
-        paddingVertical: 15,
-        paddingHorizontal: 30,
-        borderRadius: 25,
-        marginBottom: 20,
-    },
+   
     buttonText: {
         color: 'white',
         fontSize: 15,
     },
     backButton: {
         position: 'absolute',
-        top: 55,
-        left: 20,
-        backgroundColor: 'black',
-        paddingHorizontal: 10,
-        borderRadius: 20,
+        top: 20,
+        left: 10,
+        padding: 10,
+        width: 35,
         height: 35,
-        justifyContent: 'center',
+        resizeMode: 'stretch',
     },
     savedCardsContainer: {
         width: '100%',
@@ -184,31 +186,40 @@ const styles = StyleSheet.create({
     },
     backToCartButton: {
         backgroundColor: 'black',
-        paddingVertical: 10,
-        paddingHorizontal: 30,
-        borderRadius: 25,
-        position: 'absolute',
-        bottom: 20,
-        width: '60%',
+        paddingVertical: 15,
+        // paddingHorizontal: 30,
+        // borderRadius: 30,
         alignItems: 'center',
+        justifyContent: 'center',
         alignSelf: 'center',
         marginBottom: 100,
+        width: '150%',
     },
     buttonContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         position: 'absolute',
-        bottom: 40,
+        bottom: 50,
         left: 10,
         right: 10,
-      },
-      button: {
-        backgroundColor: 'black',
-        padding: 10,
-        borderRadius: 20,
+        paddingHorizontal: 30,
       },
       buttonText: {
         color: 'white',
+      },
+      bottomButton: {
+        height: 45,
+        width: 45,
+        resizeMode: 'contain',
+        paddingTop: 25,
+        borderRadius: 0,
+    },
+    line: {
+        backgroundColor: 'gray',
+        height: 1,
+        width: '100%',
+        position: 'absolute',
+        bottom: 120, // Adjust this value based on the height of your button container
       },
 });
 

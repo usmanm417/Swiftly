@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, Button, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, Button, TextInput, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LoginScreen = ({ navigation }) => {
@@ -13,7 +13,7 @@ const LoginScreen = ({ navigation }) => {
     
             if (username === storedUsername && password === storedPassword) {
                 // User is authenticated
-                navigation.navigate('StoreSelect');
+                navigation.navigate('HomePage', { selectedStore: selectedItem });
             } else {
                 // Handle authentication failure
             }
@@ -29,7 +29,7 @@ const LoginScreen = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('WelcomeScreen')}>
-                <Text style={styles.buttonText}>Back</Text>
+            <Image source={require("../assets/backarrow.png")} style={styles.backButton} />
             </TouchableOpacity>
             <Text style={styles.title}>Sign in to your account</Text>
             <TextInput
@@ -43,14 +43,14 @@ const LoginScreen = ({ navigation }) => {
                 secureTextEntry={true}
                 onChangeText={(text) => setPassword(text)}
             />
-            <TouchableOpacity style={styles.roundedButton} onPress={handleLogin}>
-                <Text style={styles.buttonText}>Login</Text>
+            <TouchableOpacity style={styles.roundedButtonLogin} onPress={handleLogin}>
+                <Text style={styles.buttonTextLogin}>Sign in</Text>
             </TouchableOpacity>
 
-            <Text style={styles.textBetween}>━━━━━━ OR ━━━━━━</Text>
+            <Text style={styles.textBetween}>━━━━━━━━━━ OR ━━━━━━━━━━</Text>
 
-            <TouchableOpacity style={styles.roundedButton} onPress={handleCreateAccount}>
-                <Text style={styles.buttonText}>Create an Account</Text>
+            <TouchableOpacity style={styles.roundedButtonCreate} onPress={handleCreateAccount}>
+                <Text style={styles.buttonTextCreate}>Create account</Text>
             </TouchableOpacity>
         </View>
     );
@@ -69,35 +69,49 @@ const styles = StyleSheet.create({
     input: {
         width: '80%',
         height: 40,
-        borderColor: 'gray',
-        borderWidth: 1,
+        borderBottomColor: 'gray', // only the bottom line
+        borderBottomWidth: 1, // width of the bottom line
         marginBottom: 20,
         padding: 10,
     },
-    roundedButton: {
+    roundedButtonCreate: {
         backgroundColor: 'black',
-        borderRadius: 20,
+        padding: 11,
+        width: '80%',
+        alignItems: 'center',
+        marginTop: 31,
+    },
+    roundedButtonLogin: {
+        backgroundColor: 'white', 
         padding: 10,
         width: '80%',
         alignItems: 'center',
         marginTop: 10,
+        borderColor: 'black',
+        borderWidth: 1,
+        marginBottom: 25
     },
-    buttonText: {
+    buttonTextCreate: {
         color: 'white',
+        fontSize: 18,
+        fontFamily: 'Avenir'
+    },
+    buttonTextLogin: {
+        color: 'black',
         fontSize: 18,
     },
     backButton: {
         position: 'absolute',
-        top: 55,
-        left: 20,
-        backgroundColor: 'black',
-        paddingHorizontal: 10, // Adjusted padding for symmetry
-        borderRadius: 20,
-        height: 35,
-        justifyContent: 'center', // Added to vertically center the text
+        top: 15,
+        left: 5,
+        padding: 10,
+        width: 30,
+        height: 30,
+        resizeMode: 'stretch',
     },
     textBetween: {
         marginTop: 10,
+        color: 'gray',
     }
 });
 

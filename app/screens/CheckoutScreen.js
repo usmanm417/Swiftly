@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Modal, ScrollView, ActivityIndicator } from 'react-native';
+import { Image, View, Text, StyleSheet, TouchableOpacity, Modal, ScrollView, ActivityIndicator } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 import { usePaymentMethods } from './PaymentMethodProvider';
 import { useCart } from './CartContext';
@@ -26,7 +26,14 @@ const CheckoutScreen = ({ navigation, route }) => {
 
     return (
         <View style={styles.container}>
+                <TouchableOpacity
+                    style={styles.backButton}
+                    onPress={() => navigation.navigate('CartScreen')}
+                >
+                    <Image source={require("../assets/backarrow.png")} style={styles.backButton} />
+                </TouchableOpacity>
             <Text style={styles.title}>Checkout</Text>
+            <Text style={styles.summary}>Order Summary</Text>
             <ScrollView style={styles.cartItemsContainer}>
                 {cartData.map((item, index) => (
                     <View key={index} style={styles.cartItemView}>
@@ -34,12 +41,15 @@ const CheckoutScreen = ({ navigation, route }) => {
                         <TouchableOpacity 
                             style={styles.deleteButton}
                             onPress={() => removeCartItem(index)}>
-                            <Text style={styles.deleteButtonText}>Delete</Text>
+                            <Text style={styles.deleteButtonText}>Remove</Text>
                         </TouchableOpacity>
+                        
                     </View>
+                    
                 ))}
+                
             </ScrollView>
-            
+            <Text style={styles.total}>Total: $149</Text>
             {paymentMethods.length === 0 ? (
                 <TouchableOpacity
                     style={styles.addPaymentMethodButton}
@@ -48,7 +58,7 @@ const CheckoutScreen = ({ navigation, route }) => {
                 </TouchableOpacity>
             ) : (
                 <View style={styles.pickerContainer}>
-                    <TouchableOpacity style={styles.button1} onPress={() => setShowPaymentMethods(true)}>
+                    <TouchableOpacity style={styles.button2} onPress={() => setShowPaymentMethods(true)}>
                         <Text style={styles.buttonText}>Select Payment Method</Text>
                     </TouchableOpacity>
                     {selectedPaymentMethod ? (
@@ -60,7 +70,7 @@ const CheckoutScreen = ({ navigation, route }) => {
             )}
 
             <TouchableOpacity style={styles.button1} onPress={handleCheckout}>
-                <Text style={styles.buttonText}>Pay Now</Text>
+                <Text style={styles.buttonTextPaymentMethod}>Pay Now</Text>
             </TouchableOpacity>
 
             <Modal
@@ -133,15 +143,26 @@ const CheckoutScreen = ({ navigation, route }) => {
                 </View>
             </Modal>
 
+            <View style={styles.line}></View>
+            
             <View style={styles.buttonContainer}>
-                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('HomePage')}>
-                    <Text style={styles.buttonText}>Scanner</Text>
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => navigation.navigate('HomePage')}
+                >
+                    <Image source={require("../assets/scannerButton.png")} style={styles.bottomButton} />
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('CartScreen')}>
-                    <Text style={styles.buttonText}>Cart</Text>
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => navigation.navigate('CartScreen')}
+                >
+                    <Image source={require("../assets/cart.png")} style={styles.bottomButton} />
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('UserProfileScreen')}>
-                    <Text style={styles.buttonText}>Profile</Text>
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => navigation.navigate('UserProfileScreen')}
+                >
+                    <Image source={require("../assets/profile.png")} style={styles.bottomButton} />
                 </TouchableOpacity>
             </View>
         </View>
@@ -149,6 +170,23 @@ const CheckoutScreen = ({ navigation, route }) => {
 };
 
 const styles = StyleSheet.create({
+    summary: {
+        alignSelf: 'flex-start',
+        fontSize: 22,
+        marginBottom: 10,
+    },
+    backButton: {
+        position: 'absolute',
+        top: -11,
+        left: 9,
+        padding: 10,
+        width: 35,
+        height: 35,
+        resizeMode: 'stretch',
+    },
+    pickerContainer: {
+        width: '65%'
+    },
     container: {
         flex: 1,
         alignItems: 'center',
@@ -157,28 +195,43 @@ const styles = StyleSheet.create({
         marginTop: 70,
     },
     title: {
-        fontSize: 24,
-        fontWeight: 'bold',
+        fontSize: 35,
+        
         marginBottom: 20,
     },
     cartItemsContainer: {
-        borderWidth: 1,
+        borderWidth: 0,
         borderColor: '#000',
-        borderRadius: 20,
+        borderRadius: 0,
         width: '100%',
-        maxHeight: 300,
-        marginBottom: 20,
+        maxHeight: 100,
+        marginBottom: 206,
+        backgroundColor: 'white',
+        
     },
     button1: {
         backgroundColor: 'black',
         padding: 15,
         borderRadius: 30,
-        width: '80%',
+        width: '150%',
         alignItems: 'center',
-        marginTop: 20,
+        marginTop: 85,
+        alignSelf: 'center',
+    },
+    button2: {
+        backgroundColor: 'white',
+        padding: 15,
+        borderWidth: 1,
+        width: '150%',
+        alignItems: 'center',
+        marginTop: 85,
         alignSelf: 'center',
     },
     buttonText: {
+        color: 'white',
+        fontSize: 15,
+    },
+    buttonTextPaymentMethod: {
         color: 'white',
         fontSize: 15,
     },
@@ -187,12 +240,13 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: 22,
+        borderWidth: 0,
     },
     modalView: {
         margin: 20,
         backgroundColor: 'white',
-        borderRadius: 20,
-        padding: 35,
+        borderRadius: 0,
+        padding: 75,
         alignItems: 'center',
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
@@ -201,6 +255,7 @@ const styles = StyleSheet.create({
         elevation: 5,
         width: '90%',
         maxHeight: '80%',
+        borderWidth: 0,
     },
     itemList: {
         width: '100%',
@@ -232,6 +287,7 @@ const styles = StyleSheet.create({
         padding: 10,
         borderRadius: 10,
         marginTop: 10,
+        width: '200%'
     },
     paymentMethodText: {
         textAlign: 'center',
@@ -248,7 +304,7 @@ const styles = StyleSheet.create({
         padding: 15,
         borderRadius: 30,
         marginTop: 20,
-        width: '80%',
+        width: '100%',
         alignItems: 'center',
         alignSelf: 'center',
     },
@@ -261,7 +317,6 @@ const styles = StyleSheet.create({
         right: 10,
     },
     button: {
-        backgroundColor: 'black',
         padding: 10,
         borderRadius: 20,
     },
@@ -270,20 +325,39 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: 10,
-        borderBottomWidth: 1,
+        borderBottomWidth: 0,
         borderColor: '#ccc',
     },
     cartItem: {
         fontSize: 16,
     },
     deleteButton: {
-        backgroundColor: 'black',
         padding: 5,
         borderRadius: 5,
     },
     deleteButtonText: {
-        color: 'white',
+        color: 'black',
     },
+    bottomButton: {
+        height: 45,
+        width: 45,
+        resizeMode: 'contain',
+        paddingTop: 25,
+        borderRadius: 0,
+    },
+    line: {
+        backgroundColor: 'gray',
+        height: 1,
+        width: '120%',
+        position: 'absolute',
+        bottom: 120, // Adjust this value based on the height of your button container
+      },
+      total: {
+        marginTop: -190,
+        marginLeft: 250,
+        fontSize: 22,
+        marginBottom: 243
+      },
 });
 
 export default CheckoutScreen;

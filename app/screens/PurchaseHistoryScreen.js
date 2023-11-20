@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native';
+import { Image, StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 import { usePurchaseHistory } from './PurchaseHistoryContext';
 
@@ -14,7 +14,7 @@ const PurchaseHistoryScreen = ({navigation}) => {
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('UserProfileScreen')}>
-        <Text style={styles.buttonText}>Back</Text>
+      <Image source={require("../assets/backarrow.png")} style={styles.backButton} />
       </TouchableOpacity>
 
       <Text style={styles.title}>Purchase History</Text>
@@ -47,17 +47,28 @@ const PurchaseHistoryScreen = ({navigation}) => {
         ))}
       </ScrollView>
 
-      <View style={styles.buttonContainer}>
-                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('HomePage')}>
-                    <Text style={styles.buttonText}>Scanner</Text>
+      <View style={styles.line}></View>
+            
+            <View style={styles.buttonContainer}>
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => navigation.navigate('HomePage')}
+                >
+                    <Image source={require("../assets/scannerButton.png")} style={styles.bottomButton} />
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('CartScreen')}>
-                    <Text style={styles.buttonText}>Cart</Text>
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => navigation.navigate('CartScreen')}
+                >
+                    <Image source={require("../assets/cart.png")} style={styles.bottomButton} />
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('UserProfileScreen')}>
-                    <Text style={styles.buttonText}>Profile</Text>
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => navigation.navigate('UserProfileScreen')}
+                >
+                    <Image source={require("../assets/profile.png")} style={styles.bottomButton} />
                 </TouchableOpacity>
-      </View>
+            </View>
     </View>
   );
 };
@@ -97,9 +108,9 @@ const styles = StyleSheet.create({
     bottom: 40,
     left: 10,
     right: 10,
+    paddingHorizontal: 30,
   },
   button: {
-    backgroundColor: 'black',
     padding: 10,
     borderRadius: 20,
   },
@@ -108,14 +119,27 @@ const styles = StyleSheet.create({
   },
   backButton: {
     position: 'absolute',
-    top: 55,
-    left: 20,
-    backgroundColor: 'black',
-    paddingHorizontal: 10,
-    borderRadius: 20,
-    height: 35,
-    justifyContent: 'center',
-    },
+        top: 20,
+        left: 10,
+        padding: 10,
+        width: 35,
+        height: 35,
+        resizeMode: 'stretch',},
+        bottomButton: {
+          height: 45,
+          width: 45,
+          resizeMode: 'contain',
+          paddingTop: 25,
+          borderRadius: 0
+        },
+        line: {
+          backgroundColor: 'gray',
+          height: 1,
+          width: '120%',
+          position: 'absolute',
+          bottom: 120, // Adjust this value based on the height of your button container
+        },
+
 });
 
 export default PurchaseHistoryScreen;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView, View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
+import { SafeAreaView, View, Text, StyleSheet, TouchableOpacity, FlatList, Image } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 const settingsOptions = [
@@ -33,7 +33,7 @@ const UserProfileScreen = ({ navigation }) => {
 return (
   <SafeAreaView style={{ flex: 1 }}>
       <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('StoreSelect')}>
-        <Text style={styles.buttonText}>Back</Text>
+      <Image source={require("../assets/backarrow.png")} style={styles.backButton} />
       </TouchableOpacity>
       <View style={styles.headerContainer}>
         <Text style={styles.headerTitle}>Profile</Text>
@@ -44,17 +44,28 @@ return (
         keyExtractor={item => item.title}
         ItemSeparatorComponent={ItemSeparator}
       />
-      <View style={styles.buttonContainer}>
-                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('HomePage')}>
-                    <Text style={styles.buttonText}>Scanner</Text>
+      <View style={styles.line}></View>
+            
+            <View style={styles.buttonContainer}>
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => navigation.navigate('HomePage')}
+                >
+                    <Image source={require("../assets/scannerButton.png")} style={styles.bottomButton} />
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('CartScreen')}>
-                    <Text style={styles.buttonText}>Cart</Text>
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => navigation.navigate('CartScreen')}
+                >
+                    <Image source={require("../assets/cart.png")} style={styles.bottomButton} />
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.button} onPress={() => console.log('Button Pressed')}>
-                    <Text style={styles.buttonText}>Profile</Text>
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => navigation.navigate('UserProfileScreen')}
+                >
+                    <Image source={require("../assets/profile.png")} style={styles.bottomButton} />
                 </TouchableOpacity>
-      </View>
+            </View>
     </SafeAreaView>
   );
 };
@@ -86,6 +97,13 @@ const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: '#ccc',
   },
+  line: {
+    backgroundColor: 'gray',
+    height: 1,
+    width: '100%',
+    position: 'absolute',
+    bottom: 120, // Adjust this value based on the height of your button container
+  },
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -93,9 +111,9 @@ const styles = StyleSheet.create({
     bottom: 40,
     left: 10,
     right: 10,
+    paddingHorizontal: 30,
   },
   button: {
-    backgroundColor: 'black',
     padding: 10,
     borderRadius: 20,
   },
@@ -103,15 +121,21 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   backButton: {
-  position: 'absolute',
-  top: 55,
-  left: 20,
-  backgroundColor: 'black',
-  paddingHorizontal: 10,
-  borderRadius: 20,
-  height: 35,
-  justifyContent: 'center',
-  },
+    position: 'absolute',
+    top: 20,
+    left: 10,
+    padding: 10,
+    width: 35,
+    height: 35,
+    resizeMode: 'stretch',
+},
+bottomButton: {
+  height: 45,
+  width: 45,
+  resizeMode: 'contain',
+  paddingTop: 25,
+  borderRadius: 0
+}
 });
 
 export default UserProfileScreen;
