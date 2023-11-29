@@ -1,19 +1,9 @@
-import { loadStripe } from '@stripe/stripe-js'
 import React, { useState } from 'react';
 import { Image, View, Text, StyleSheet, TouchableOpacity, Modal, ScrollView, ActivityIndicator } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 import { usePaymentMethods } from './PaymentMethodProvider';
 import { useCart } from './CartContext';
 import { usePurchaseHistory } from './PurchaseHistoryContext';
-
-let stripePromise;
-
-const getStripe = () => {
-    if (!stripePromise) {
-        stripePromise = loadStripe('pk_test_51OHeJYI4McseYPWyvnJuy6XAPB2GkpWzaMC2bE2QuNGhqyurMqEXSf5QxSCQl64hlNM5lIqvsswlYhWT4cHoo4lB00x9CAq1Ws')
-    }
-    return StripePromise;
-};
 
 const CheckoutScreen = ({ navigation }) => {
     const { cartData, removeCartItem, total } = useCart();

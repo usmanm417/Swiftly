@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Modal, Image } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
-import { firebase } from '../../config';
-import { collection, query, where, getDocs } from 'firebase/firestore';
+import { getFirestore, collection, query, where, getDocs } from 'firebase/firestore';
+import app from '../../config';
 import { useCart } from './CartContext';
 
 const HomePage = ({ navigation }) => {
@@ -31,7 +31,7 @@ const HomePage = ({ navigation }) => {
     };
 
     const fetchItemData = async (barcodeId) => {
-        const db = firebase.firestore();
+        const db = getFirestore(app);
         const itemRef = collection(db, 'items');
         const barcodeString = String(barcodeId).trim();
 

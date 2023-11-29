@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { Image, View, Text, Button, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Image, View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../../config';
+import AsyncStorage from '@react-native-async-storage/async-storage'; // Import AsyncStorage
 
 const RegisterScreen = ({ navigation }) => {
     const [name, setName] = useState('');
@@ -12,26 +14,32 @@ const RegisterScreen = ({ navigation }) => {
         const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         return re.test(String(email).toLowerCase());
     };
-    
 
     const handleRegister = async () => {
         if (!name || !username || !email || !password) {
             alert("Please fill all fields");
             return;
         }
-    
+
         if (!isValidEmail(email)) {
             alert("Invalid email");
             return;
         }
 
         try {
-            await AsyncStorage.setItem('userCredentials', JSON.stringify({ name, username, email, password }));
-            const savedData = await AsyncStorage.getItem('userCredentials');
-            console.log('Saved data:', savedData); // Log to check
-            navigation.navigate('StoreSelect');
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            
+            const userData = {
+                name,
+                username,
+                email,
+            };
+            await AsyncStorage.setItem('userCredentials', JSON.stringify(userData));
+
+            console.log(userCredential);
+            navigation.navigate('HomePage');
         } catch (error) {
-            console.error('Failed to save the data to the storage', error);
+            console.error('Failed to save the data to storage', error);
         }
     };
 

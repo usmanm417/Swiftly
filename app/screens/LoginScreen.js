@@ -1,24 +1,20 @@
 import React, { useState } from 'react';
-import { View, Text, Button, TextInput, StyleSheet, TouchableOpacity, Image } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../../config';
 
 const LoginScreen = ({ navigation }) => {
-    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const handleLogin = async () => {
+    const handleLogin = async (e) => {
+        e.preventDefault();
         try {
-            const storedCredentials = await AsyncStorage.getItem('userCredentials');
-            console.log('Retrieved data:', storedCredentials); // Log to check
-            const { username: storedUsername, password: storedPassword } = JSON.parse(storedCredentials || '{}');
-        
-            if (username === storedUsername && password === storedPassword) {
-                navigation.navigate('StoreSelect');
-            } else {
-                alert("Invalid credentials"); // Notify the user
-            }
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
+            console.log(userCredential);
+            navigation.navigate('StoreSelect');
         } catch (error) {
-            console.error('Failed to read the data from the storage', error);
+            console.log(error);
         }
     };
     
@@ -35,12 +31,14 @@ const LoginScreen = ({ navigation }) => {
             <TextInput
                 style={styles.input}
                 placeholder="Username"
-                onChangeText={(text) => setUsername(text)}
+                value = {email}
+                onChangeText={(text) => setEmail(text)}
             />
             <TextInput
                 style={styles.input}
                 placeholder="Password"
                 secureTextEntry={true}
+                value = {password}
                 onChangeText={(text) => setPassword(text)}
             />
             <TouchableOpacity style={styles.roundedButtonLogin} onPress={handleLogin}>

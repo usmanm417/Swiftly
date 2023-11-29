@@ -2,22 +2,23 @@ import React, { useState, useEffect } from 'react';
 import { Image, View, Text, TextInput, Button, TouchableOpacity, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const PersonalInfoScreen = ({ navigation, route }) => {
+const PersonalInfoScreen = ({ navigation }) => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
-    const [username, setUserName] = useState('');
+    const [username, setUsername] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('Enter Phone Number');
     const [isEditing, setIsEditing] = useState({ name: false, email: false, username: false, phoneNumber: false });
 
     useEffect(() => {
         const loadUserData = async () => {
             try {
+                // Load user data from AsyncStorage
                 const userDataString = await AsyncStorage.getItem('userCredentials');
                 if (userDataString) {
                     const userData = JSON.parse(userDataString);
-                    setName(userData.name)
+                    setName(userData.name);
                     setEmail(userData.email);
-                    setUserName(userData.username);
+                    setUsername(userData.username);
                 }
             } catch (error) {
                 console.error('Failed to load user data', error);
@@ -61,7 +62,7 @@ return (
             label="Username"
             value={username}
             isEditing={isEditing.username}
-            onChangeText={setUserName}
+            onChangeText={setUsername}
             onEdit={() => handleEdit('username')}
             onSave={() => handleSave('username')}
         />
