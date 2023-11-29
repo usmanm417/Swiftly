@@ -26,9 +26,10 @@ export async function createCheckoutSession(uid) {
         onSnapshot(doc(db, checkoutCollection.path, checkoutSessionRef.id), async (docSnap) => {
             if (docSnap.exists()) {
                 const data = docSnap.data();
-                console.log(data);
+                //console.log(data);
                 if (data && data.sessionId) {
                     const stripe = await getStripe();
+                    console.log(stripe);
                     const result = stripe.redirectToCheckout({ sessionId: data.sessionId });
                 } 
             } else {

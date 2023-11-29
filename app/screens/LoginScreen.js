@@ -12,7 +12,7 @@ const LoginScreen = ({ navigation }) => {
         try {
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
             console.log(userCredential);
-            navigation.navigate('StoreSelect');
+            navigation.navigate('HomePage');
         } catch (error) {
             console.log(error);
         }

@@ -2,10 +2,10 @@ import { Stripe, loadStripe } from '@stripe/stripe-js';
 
 let stripePromise;
 
-const initializeStripe = () => {
+const initializeStripe = async () => {
     if (!stripePromise) {
-        stripePromise = loadStripe(
-            "sk_test_51OHeJYI4McseYPWyBGES5KfQAJgw3b2PfkGnq4SOc3ILaBKEcCMkcSZGnz0UHmjffeaSCrc8nPW3sZsuGmwn5bzY00YiYc6BAF"
+        stripePromise = await loadStripe(
+            "pk_test_51OHeJYI4McseYPWyvnJuy6XAPB2GkpWzaMC2bE2QuNGhqyurMqEXSf5QxSCQl64hlNM5lIqvsswlYhWT4cHoo4lB00x9CAq1Ws"
         );
     }
     console.log(stripePromise);
