@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import { Image, View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../config';
+import { getFirestore, collection, addDoc } from 'firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage'; // Import AsyncStorage
+import app from '../../config';
 
 const RegisterScreen = ({ navigation }) => {
     const [name, setName] = useState('');
@@ -28,6 +30,15 @@ const RegisterScreen = ({ navigation }) => {
 
         try {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+
+            const db = getFirestore(app);
+            const usersCollection = collection(db, 'users');
+            await addDoc(usersCollection, {
+                name,
+                username,
+                email,
+                userId: userCredential.user.uid // Add the user's ID as well
+            });
             
             const userData = {
                 name,

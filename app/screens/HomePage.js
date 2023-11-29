@@ -80,7 +80,7 @@ const HomePage = ({ navigation }) => {
             price: itemDetails.price
         };
         addCartItem(itemToAdd); // Use addCartItem to update the cart
-        console.log(itemToAdd)
+        console.log(itemToAdd);
         setIsModalVisible(false);
         navigation.navigate('CartScreen');
     }; 

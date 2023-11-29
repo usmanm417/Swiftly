@@ -3,7 +3,7 @@ import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Image } from 'rea
 import { useCart } from './CartContext';
 
 const CartScreen = ({ navigation, route }) => {
-    const { cartData, removeCartItem} = useCart();
+    const { cartData, removeCartItem } = useCart();
     const [total, setTotal] = useState(0);
 
     const setItemPicture = (itemName) => {
