@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Modal, Image } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import { getFirestore, collection, query, where, getDocs } from 'firebase/firestore';
-import app from '../../config';
 import { useCart } from './CartContext';
+import app from '../../config';
 
 const HomePage = ({ navigation }) => {
     const [hasPermission, setHasPermission] = useState(null);
@@ -80,7 +80,7 @@ const HomePage = ({ navigation }) => {
             price: itemDetails.price
         };
         addCartItem(itemToAdd); // Use addCartItem to update the cart
-        console.log(itemToAdd);
+        console.log(itemToAdd)
         setIsModalVisible(false);
         navigation.navigate('CartScreen');
     }; 
@@ -88,12 +88,17 @@ const HomePage = ({ navigation }) => {
     const setItemPicture = (barcodeId) => {
         let returnedImage = 0;
         if (barcodeId === '9353636023419') {
-            returnedImage = require("../assets/hudsonminiskirt.png");
+            returnedImage = require("../assets/skirt1.jpg");
         } else if (barcodeId === '0197346016694') {
-            returnedImage = require("../assets/tightpurpleskirt.png")
+            returnedImage = require("../assets/skirt2.jpg")
         }
         return returnedImage;
     };
+
+    const combinedFunction = (boolean) => {
+        setIsModalVisible(false);
+        setScanned(false);
+    }
     
 
     // Main view
@@ -108,11 +113,7 @@ const HomePage = ({ navigation }) => {
             <View style={styles.barcodeBox}>
                 <BarCodeScanner onBarCodeScanned={scanned ? undefined : handleBarCodeScanned} style={styles.barcodeScanner} />
             </View>
-            {scanned && (
-                <TouchableOpacity style={styles.buttonScanAgain} onPress={() => setScanned(false)}>
-                    <Text style={styles.buttonTextScanAgain}>Click to scan again</Text>
-                </TouchableOpacity>
-            )}
+            {scanned}
             <Text style={styles.title}>See something you like? Scan the tag!</Text>
           
 
@@ -127,13 +128,13 @@ const HomePage = ({ navigation }) => {
                 <View style={styles.centeredView}>
                 <View style={styles.modalView}>
                     <TouchableOpacity style={styles.backBut}
-                        onPress={() => setIsModalVisible(false)}>
+                        onPress={() => combinedFunction(false)}>
                     
                         <Image source={require("../assets/backarrow.png")} style={styles.backButton} />
                     </TouchableOpacity>
                     <Image source={setItemPicture(itemDetails.itemID)} style={styles.itemImage} />
                     <Text style={styles.itemTitle}>{itemDetails.name}</Text>
-                    <Text style={styles.itemDetail}>Price: ${itemDetails.price}</Text>
+                    <Text style={styles.itemDetail1}>${itemDetails.price}</Text>
                     <Text style={styles.itemDetail}>Size: {itemDetails.size}</Text>
                     <Text style={styles.itemDetail}>Color: {itemDetails.color}</Text>
                     <Text style={styles.itemDetail}>Material: {itemDetails.material}</Text>
@@ -233,8 +234,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         height: 390,
-        width: '95%',
-        borderRadius: 10,
+        width: '100%',
         overflow: 'hidden',
         backgroundColor: 'gray',
     },
@@ -346,6 +346,13 @@ const styles = StyleSheet.create({
         fontSize: 17,
         marginVertical: 4,
         marginTop: 0,
+        marginLeft:-10,
+    },
+    itemDetail1: {
+        fontSize: 23,
+        marginVertical: 4,
+        marginTop: 0,
+        marginLeft:-10,
     },
     buttonRow: {
         flexDirection: 'row',
@@ -369,17 +376,17 @@ const styles = StyleSheet.create({
         marginTop: 50,
         paddingTop: 100,
         paddingBottom: 50,
-        width: 350,
+        width: '135%',
         height: 500,
         resizeMode: 'cover',
         marginBottom: 5,
         borderColor: 'black',
-        borderWidth: 1,
-        backgroundColor: 'gray',
+        borderWidth: 0,
+        backgroundColor: 'black',
     },
     itemTitle: {
         fontWeight: 'bold',
-        fontSize: 22,
+        fontSize: 25,
         marginBottom: 10,
     },
     bottomButton: {

@@ -1,10 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { useCart } from './CartContext';
+import { createCheckoutSession } from '../../stripe/createCheckoutSession';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
 const CartScreen = ({ navigation, route }) => {
     const { cartData, removeCartItem } = useCart();
     const [total, setTotal] = useState(0);
+    const [user, setUser] = useState(null);
+
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            setUser(user);
+        }
+    })
 
     const setItemPicture = (itemName) => {
         switch (itemName) {
@@ -43,6 +53,8 @@ const CartScreen = ({ navigation, route }) => {
         updatedCartData[index].quantity += 1;
         setTotal(total + item.price);
     };
+
+
 
     return (
         <View style={{ flex: 1 }}>
@@ -87,7 +99,7 @@ const CartScreen = ({ navigation, route }) => {
             <View style={styles.checkoutButtonContainer}>
             <TouchableOpacity
                     style={styles.checkoutButton}
-                    onPress={() => navigation.navigate('CheckoutScreen', { cartData, total })}
+                    onPress={() => createCheckoutSession(user.uid)}
                 >
                     <Text style={styles.buttonText}>Checkout</Text>
             </TouchableOpacity>
