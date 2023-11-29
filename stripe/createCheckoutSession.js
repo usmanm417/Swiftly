@@ -3,7 +3,6 @@ import { getFirestore, collection, query, where, getDocs, doc, addDoc, onSnapsho
 import app from "../config";
 
 export async function createCheckoutSession(uid) {
-    console.log('hi');
     const db = getFirestore(app);
     const usersCollection = collection(db, 'users');
     const userdoc = doc(usersCollection, uid);
