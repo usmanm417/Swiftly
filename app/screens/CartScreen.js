@@ -1,6 +1,17 @@
+import { loadStripe } from '@stripe/stripe-js'
 import React, { useState, useEffect } from 'react';
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { useCart } from './CartContext';
+
+let stripePromise;
+
+const getStripe = () => {
+    if (!stripePromise) {
+        stripePromise = loadStripe('pk_test_51OHeJYI4McseYPWyvnJuy6XAPB2GkpWzaMC2bE2QuNGhqyurMqEXSf5QxSCQl64hlNM5lIqvsswlYhWT4cHoo4lB00x9CAq1Ws')
+    }
+    return StripePromise;
+};
+
 
 const CartScreen = ({ navigation, route }) => {
     const { cartData, removeCartItem} = useCart();
@@ -144,8 +155,6 @@ const styles = StyleSheet.create({
     itemTextName: {
         fontSize: 23,
         marginBottom: 5, // Add a bottom margin for spacing
-        
-       
         paddingLeft: 9,
         marginTop: 25,
         marginLeft: 7,
@@ -222,7 +231,7 @@ const styles = StyleSheet.create({
     },
     textContainer: {
         flex: 1, // Takes up the remaining space beside the image
-        justifyContent: 'center',
+        justifyContent: 'flex-start',
     },
     quantityContainer: {
         flexDirection: 'row',

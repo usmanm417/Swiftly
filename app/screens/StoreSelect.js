@@ -75,11 +75,11 @@ const StoreSelect = ({navigation}) => {
         </TouchableOpacity>
       </Modal>
 
-      <View style={styles.footer}>
+     
         <TouchableOpacity onPress={handleSelectStore} style={styles.selectStoreButton}>
           <Text style={styles.selectStoreButtonText}>Start scanning</Text>
         </TouchableOpacity>
-      </View>
+    
     </ImageBackground>
   );
 };
@@ -118,8 +118,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.5)',
     padding: 15,
     width: '90%',
-    borderRadius: 5,
-    marginTop: 300,
+    marginTop: 350,
     alignSelf: 'center',
 
   },
@@ -152,18 +151,22 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   footer: {
-    flex: 0.5, // Adjust the flex value to position the footer correctly
+    flex: 1, // Adjust the flex value to position the footer correctly
     justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
+    marginTop: 0,
+    marginBottom: 0,
     padding: 20,
   },
   selectStoreButton: {
     backgroundColor: 'black',
     paddingVertical: 15,
     width: '90%', // Use percentage for width
+    marginLeft: '5%',
     borderWidth: 1,
     borderRadius: 0,
+    marginBottom: 350,
     alignItems: 'center',
   },
   selectStoreButtonText: {

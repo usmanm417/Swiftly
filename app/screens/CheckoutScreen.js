@@ -1,9 +1,19 @@
+import { loadStripe } from '@stripe/stripe-js'
 import React, { useState } from 'react';
 import { Image, View, Text, StyleSheet, TouchableOpacity, Modal, ScrollView, ActivityIndicator } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 import { usePaymentMethods } from './PaymentMethodProvider';
 import { useCart } from './CartContext';
 import { usePurchaseHistory } from './PurchaseHistoryContext';
+
+let stripePromise;
+
+const getStripe = () => {
+    if (!stripePromise) {
+        stripePromise = loadStripe('pk_test_51OHeJYI4McseYPWyvnJuy6XAPB2GkpWzaMC2bE2QuNGhqyurMqEXSf5QxSCQl64hlNM5lIqvsswlYhWT4cHoo4lB00x9CAq1Ws')
+    }
+    return StripePromise;
+};
 
 const CheckoutScreen = ({ navigation }) => {
     const { cartData, removeCartItem, total } = useCart();
@@ -23,6 +33,8 @@ const CheckoutScreen = ({ navigation }) => {
             removeCartItem(null); // Clear all items from the cart
         }, 2000);
     };
+
+    let date = new Date();
 
     return (
         <View style={styles.container}>
@@ -54,12 +66,12 @@ const CheckoutScreen = ({ navigation }) => {
                 <TouchableOpacity
                     style={styles.addPaymentMethodButton}
                     onPress={() => navigation.navigate('PaymentMethodScreen')}>
-                    <Text style={styles.buttonText}>Add a new saved payment method</Text>
+                    <Text style={styles.buttonText1}>Add payment method</Text>
                 </TouchableOpacity>
             ) : (
                 <View style={styles.pickerContainer}>
                     <TouchableOpacity style={styles.button2} onPress={() => setShowPaymentMethods(true)}>
-                        <Text style={styles.buttonText}>Select Payment Method</Text>
+                        <Text style={styles.buttonTextSelectPaymentMethod}>Select Payment Method</Text>
                     </TouchableOpacity>
                     {selectedPaymentMethod ? (
                         <Text style={styles.selectedPaymentMethod}>
@@ -68,11 +80,9 @@ const CheckoutScreen = ({ navigation }) => {
                     ) : null}
                 </View>
             )}
-            <Text style={styles.selectCard}>
-                                    Select Card
-                                </Text>
+            
             <TouchableOpacity style={styles.button1} onPress={handleCheckout}>
-                <Text style={styles.buttonTextPaymentMethod}>Pay Now</Text>
+                <Text style={styles.buttonTextPaymentMethod}>Complete purchase</Text>
             </TouchableOpacity>
 
             <Modal
@@ -123,8 +133,11 @@ const CheckoutScreen = ({ navigation }) => {
                             </>
                         ) : paymentSuccess ? (
                             <>
-                                <Text style={styles.modalText}>Payment Successful!</Text>
-                                <ScrollView style={styles.itemList}>
+                                <Image source={require("../assets/checkMark.png")} style={styles.checkMark} />
+                                <Text style={styles.modalText}>Payment Completed</Text>
+                                <Text style={styles.modalText1}>Purchase #: 152378948</Text>
+                                <Text style={styles.modalText1}>Date: 29/11/2023</Text>
+                                {/* <ScrollView style={styles.itemList}>
                                 {cartData.map((item, index) => (
                                     <View key={index} style={styles.cartItem}>
                                         <Text>{item.item} - {item.quantity}</Text>
@@ -133,8 +146,8 @@ const CheckoutScreen = ({ navigation }) => {
                                         </TouchableOpacity>
                                     </View>
                                 ))}
-                                </ScrollView>
-                                <Text style={styles.qrMessage}>Scan the QR code on your way out</Text>
+                                </ScrollView> */}
+                                <Text style={styles.qrMessage}>Please  scan receipt with store associate before exiting the store to validate purchase.</Text>
                                 <QRCode
                                     value={JSON.stringify(cartData)}
                                     size={200}
@@ -202,6 +215,15 @@ const styles = StyleSheet.create({
         height: 35,
         resizeMode: 'stretch',
     },
+    checkMark: {
+        position: 'absolute',
+        top: 15,
+        left: 150,
+        padding: 10,
+        width: 55,
+        height: 55,
+        resizeMode: 'stretch',
+    },
     pickerContainer: {
         width: '65%'
     },
@@ -216,6 +238,11 @@ const styles = StyleSheet.create({
         fontSize: 35,
         
         marginBottom: 20,
+    },
+    modalText: {
+        fontSize: 21,
+        fontWeight:'bold',
+        marginBottom: 10,
     },
     cartItemsContainer: {
         borderWidth: 0,
@@ -238,12 +265,21 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         padding: 15,
         borderWidth: 1,
-        width: '150%',
+        width: '154%',
         alignItems: 'center',
         alignSelf: 'center',
+        margin: 10,
     },
     buttonText: {
         color: 'white',
+        fontSize: 15,
+    },
+    buttonText1: {
+        color: 'black',
+        fontSize: 15,
+    },
+    buttonTextSelectPaymentMethod: {
+        color: 'black',
         fontSize: 15,
     },
     buttonTextPaymentMethod: {
@@ -284,6 +320,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         marginTop: 10,
         marginBottom: 10,
+        textAlign: 'center'
     },
     buttonClose: {
         backgroundColor: 'black',
@@ -300,7 +337,7 @@ const styles = StyleSheet.create({
     paymentMethodButton: {
         backgroundColor: '#f0f0f0',
         padding: 10,
-        borderRadius: 10,
+        borderRadius: 0,
         marginTop: 10,
         width: '100%'
     },
@@ -315,13 +352,14 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     addPaymentMethodButton: {
-        backgroundColor: 'black', // Match the color with Pay Now button
+        backgroundColor: 'white', // Match the color with Pay Now button
         padding: 19,
         width: '100%', // Match the width with Pay Now button
         alignItems: 'center',
         alignSelf: 'center',
         marginTop: 30, // Increased from the previous value for more space
         marginBottom: 10, // Adjust as needed to create space above the "Pay Now" button
+        borderWidth: 1,
     },
     buttonContainer: {
         flexDirection: 'row',
@@ -333,7 +371,8 @@ const styles = StyleSheet.create({
     },
     button: {
         padding: 10,
-        borderRadius: 20,
+        borderRadius: 0,
+    
     },
     cartItemView: {
         flexDirection: 'row',
