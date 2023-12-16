@@ -1,4 +1,4 @@
-# swiftly-mobile
+# Swiftly
 
 Swiftly is an app designed to revolutionalizen the in store shopping experience. WIth Swiftly, users can scan items throughout the store and checkout straight from their phone. This allows users to skip long checkout lines and avoid spending too much unnessesary time. 
 
